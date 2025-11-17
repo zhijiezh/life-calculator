@@ -1,4 +1,4 @@
-import { Container, Paper, Button, Stepper, Step, StepLabel } from '@mui/material'
+import { Container, Button, Stepper, Step, StepLabel, Box, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { CalculatorData } from '../types'
 import MobileCard from '../components/cardWrappers/MobileCard'
@@ -22,33 +22,36 @@ export default function Step3Spending({ data, setData }: Props) {
     navigate('/step2')
   }
 
-  return (
-    <Container maxWidth="sm" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 2 } }}>
-      <Stepper activeStep={2} sx={{ mb: 4, '& .MuiStepLabel-label': { fontSize: { xs: '0.75rem', sm: '0.875rem' } } }}>
+  const header = (
+    <Box>
+      <Stepper activeStep={2} sx={{ mb: 2, '& .MuiStepLabel-label': { fontSize: { xs: '0.75rem', sm: '0.875rem' } } }}>
         {steps.map((label) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
           </Step>
         ))}
       </Stepper>
+      <Typography variant="h5">支出设置</Typography>
+    </Box>
+  )
 
-      <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 } }}>
-        <MobileCard
-          bottomBoxProps={{ sx: { display: { xs: 'flex', lg: 'none' } } }}
-          bottomActions={
-            <>
-              <Button onClick={handleBack} size="large" sx={{ minHeight: 48, flex: 1 }}>
-                上一步
-              </Button>
-              <Button variant="contained" onClick={handleNext} size="large" sx={{ minHeight: 48, flex: 1 }}>
-                下一步
-              </Button>
-            </>
-          }
-        >
-          <SpendingBody data={data} setData={setData} />
-        </MobileCard>
-      </Paper>
+  return (
+    <Container maxWidth="sm" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 2 } }}>
+      <MobileCard
+        header={header}
+        footer={
+          <>
+            <Button onClick={handleBack} size="large" sx={{ minHeight: 48, flex: 1 }}>
+              上一步
+            </Button>
+            <Button variant="contained" onClick={handleNext} size="large" sx={{ minHeight: 48, flex: 1 }}>
+              下一步
+            </Button>
+          </>
+        }
+      >
+        <SpendingBody data={data} setData={setData} />
+      </MobileCard>
     </Container>
   )
 }

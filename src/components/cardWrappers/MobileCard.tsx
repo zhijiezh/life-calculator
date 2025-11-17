@@ -1,27 +1,30 @@
 import { ReactNode } from 'react'
-import { Box, Divider, BoxProps } from '@mui/material'
+import { Box, Paper } from '@mui/material'
 
 interface MobileCardProps {
-  topActions?: ReactNode
-  bottomActions?: ReactNode
-  bottomBoxProps?: BoxProps
+  header?: ReactNode
+  footer?: ReactNode
   children: ReactNode
 }
 
-export default function MobileCard({ topActions, bottomActions, bottomBoxProps, children }: MobileCardProps) {
+export default function MobileCard({ header, footer, children }: MobileCardProps) {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      {topActions}
-      <Box>{children}</Box>
-      {bottomActions && (
-        <>
-          <Divider />
-          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'space-between' }} {...bottomBoxProps}>
-            {bottomActions}
-          </Box>
-        </>
+    <Paper
+      elevation={3}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: 'calc(100vh - 48px)',
+        p: 2,
+        gap: 2,
+      }}
+    >
+      {header && <Box sx={{ flexShrink: 0 }}>{header}</Box>}
+      <Box sx={{ flex: 1, overflowY: 'auto' }}>{children}</Box>
+      {footer && (
+        <Box sx={{ flexShrink: 0, pt: 1, display: 'flex', gap: 2, flexWrap: 'wrap' }}>{footer}</Box>
       )}
-    </Box>
+    </Paper>
   )
 }
 
