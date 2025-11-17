@@ -29,12 +29,7 @@ export default function Step2Salary({ data, setData }: Props) {
           </Step>
         ))}
       </Stepper>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Typography variant="h5">工资收入曲线</Typography>
-        <Button size="small" onClick={handleBack}>
-          上一步
-        </Button>
-      </Box>
+      <Typography variant="h5">工资收入曲线</Typography>
     </Box>
   )
 

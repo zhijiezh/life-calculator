@@ -20,7 +20,7 @@ export default function MobileCard({ header, footer, children }: MobileCardProps
       }}
     >
       {header && <Box sx={{ flexShrink: 0 }}>{header}</Box>}
-      <Box sx={{ flex: 1, overflowY: 'auto' }}>{children}</Box>
+      <Box sx={{ flex: 1, overflowY: 'auto', pt: 2 }}>{children}</Box>
       {footer && (
         <Box sx={{ flexShrink: 0, pt: 1, display: 'flex', gap: 2, flexWrap: 'wrap' }}>{footer}</Box>
       )}
