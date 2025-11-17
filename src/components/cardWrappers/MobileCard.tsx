@@ -14,7 +14,7 @@ export default function MobileCard({ header, footer, children }: MobileCardProps
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: 'calc(100dvh - 32px)', // 使用 dvh（动态视口高度）而不是 vh
+        flex: 1,
         p: 2,
         gap: 2,
       }}

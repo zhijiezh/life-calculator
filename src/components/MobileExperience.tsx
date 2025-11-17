@@ -117,9 +117,13 @@ function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
   return (
     <Box
       sx={{
-        position: 'relative',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         width: '100%',
-        minHeight: '100vh',
+        height: '100dvh',
         overflow: 'hidden',
       }}
     >
@@ -129,7 +133,7 @@ function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
           custom={direction}
           drag="x"
           dragDirectionLock
-          dragElastic={0.5} // 提高弹性，拖动更跟手
+          dragElastic={0.5}
           dragConstraints={{ left: 0, right: 0 }}
           onDragEnd={handleDragEnd}
           variants={variants}
@@ -137,7 +141,7 @@ function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
           animate="center"
           exit="exit"
           transition={{
-            x: { type: 'spring', stiffness: 300, damping: 30 }, // 降低刚性，更柔和
+            x: { type: 'spring', stiffness: 300, damping: 30 },
             opacity: { duration: 0.2 },
           }}
           style={{
@@ -148,13 +152,16 @@ function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
             left: 0,
             overflowY: 'auto',
             overflowX: 'hidden',
+            WebkitOverflowScrolling: 'touch',
           }}
         >
-          <Container maxWidth="md" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 2 } }}>
-            <MobileCard header={header} footer={footer}>
-              {config.component({ data, setData })}
-            </MobileCard>
-          </Container>
+          <Box sx={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Container maxWidth="md" sx={{ flex: 1, py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 2 }, display: 'flex' }}>
+              <MobileCard header={header} footer={footer}>
+                {config.component({ data, setData })}
+              </MobileCard>
+            </Container>
+          </Box>
         </motion.div>
       </AnimatePresence>
     </Box>
