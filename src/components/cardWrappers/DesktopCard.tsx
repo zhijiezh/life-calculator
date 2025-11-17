@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Card, CardHeader, CardContent, CardActions, Divider, Box, Typography } from '@mui/material'
+import { Card, CardHeader, CardContent, CardActions, Divider, Box } from '@mui/material'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
@@ -74,18 +74,23 @@ export default function DesktopCard({ id, title, description, actions, children 
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        cursor: 'grab',
-        '&:hover': {
-          boxShadow: 4,
-        },
-        '&:active': {
-          cursor: 'grabbing',
-        },
       }}
       {...attributes}
-      {...listeners}
     >
-      <CardHeader title={title} subheader={description} />
+      <CardHeader
+        title={title}
+        subheader={description}
+        sx={{
+          cursor: 'grab',
+          '&:hover': {
+            backgroundColor: 'action.hover',
+          },
+          '&:active': {
+            cursor: 'grabbing',
+          },
+        }}
+        {...listeners}
+      />
       <Divider />
       <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, pb: 3 }}>
         {children}

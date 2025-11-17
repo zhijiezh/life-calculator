@@ -33,13 +33,17 @@ function App() {
   const [data, setData] = useState<CalculatorData>(() => createDefaultData())
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
 
+  const handleReset = () => {
+    setData(createDefaultData())
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {isDesktop ? (
         <DesktopExperience data={data} setData={setData} />
       ) : (
-        <MobileExperience data={data} setData={setData} />
+        <MobileExperience data={data} setData={setData} onReset={handleReset} />
       )}
     </ThemeProvider>
   )
