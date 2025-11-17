@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { HashRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
-import { Button, Container } from '@mui/material'
+import { Button, Container, Box } from '@mui/material'
 import { CalculatorData } from '../types'
 import MobileCard from './cardWrappers/MobileCard'
 import MobileProgressHeader from './MobileProgressHeader'
@@ -59,8 +59,8 @@ function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
   }
 
   const handleDragEnd = (_: any, info: PanInfo) => {
-    const swipeThreshold = 100
-    const swipeVelocity = 300
+    const swipeThreshold = 50 // 降低阈值，更容易触发
+    const swipeVelocity = 200 // 降低速度要求
 
     if (Math.abs(info.offset.x) > swipeThreshold || Math.abs(info.velocity.x) > swipeVelocity) {
       if (info.offset.x < 0) {
@@ -122,14 +122,21 @@ function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
   }
 
   return (
-    <Container maxWidth="md" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 2 }, overflow: 'hidden', touchAction: 'pan-y' }}>
-      <AnimatePresence mode="wait" custom={direction}>
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100%',
+        minHeight: '100vh',
+        overflow: 'hidden',
+      }}
+    >
+      <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={location.pathname}
           custom={direction}
           drag="x"
           dragDirectionLock
-          dragElastic={0.3}
+          dragElastic={0.5} // 提高弹性，拖动更跟手
           dragConstraints={{ left: 0, right: 0 }}
           onDragEnd={handleDragEnd}
           variants={variants}
@@ -137,16 +144,27 @@ function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
           animate="center"
           exit="exit"
           transition={{
-            x: { type: 'spring', stiffness: 300, damping: 30 },
+            x: { type: 'spring', stiffness: 300, damping: 30 }, // 降低刚性，更柔和
             opacity: { duration: 0.2 },
           }}
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            top: 0,
+            left: 0,
+            overflowY: 'auto',
+            overflowX: 'hidden',
+          }}
         >
-          <MobileCard header={header} footer={footer}>
-            <Component data={data} setData={setData} />
-          </MobileCard>
+          <Container maxWidth="md" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 2 } }}>
+            <MobileCard header={header} footer={footer}>
+              <Component data={data} setData={setData} />
+            </MobileCard>
+          </Container>
         </motion.div>
       </AnimatePresence>
-    </Container>
+    </Box>
   )
 }
 
