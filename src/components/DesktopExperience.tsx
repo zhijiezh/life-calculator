@@ -14,23 +14,11 @@ import {
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
 import { CalculatorData } from '../types'
 import DesktopCard from './cardWrappers/DesktopCard'
-import BasicInfoBody from '../cardBodies/BasicInfoBody'
-import SalaryBody from '../cardBodies/SalaryBody'
-import SpendingBody from '../cardBodies/SpendingBody'
-import InvestmentBody from '../cardBodies/InvestmentBody'
-import TargetsBody from '../cardBodies/TargetsBody'
-import ResultsBody from '../cardBodies/ResultsBody'
+import { cardConfigs, desktopInitialLayout } from '../config/cardConfig'
 
 interface DesktopExperienceProps {
   data: CalculatorData
   setData: (data: CalculatorData) => void
-}
-
-interface CardConfig {
-  id: string
-  title: string
-  description: string
-  component: JSX.Element
 }
 
 // 空列投放区域组件
@@ -53,25 +41,8 @@ function DroppableColumn({ id, children }: { id: string; children: React.ReactNo
 }
 
 export default function DesktopExperience({ data, setData }: DesktopExperienceProps) {
-  // 初始卡片配置（用 useMemo 避免每次渲染重新创建）
-  const initialCards: CardConfig[] = useMemo(
-    () => [
-      { id: 'basic', title: '基础信息', description: '设置预测范围与初始资产', component: <BasicInfoBody data={data} setData={setData} /> },
-      { id: 'salary', title: '工资收入曲线', description: '拖拽节点或输入数值，描绘未来收入变化', component: <SalaryBody data={data} setData={setData} /> },
-      { id: 'spending', title: '支出设置', description: '每年的基础支出和通胀假设', component: <SpendingBody data={data} setData={setData} /> },
-      { id: 'investment', title: '投资设置', description: '设定预期的年投资回报率', component: <InvestmentBody data={data} setData={setData} /> },
-      { id: 'targets', title: '目标设置', description: '定义收入、储蓄与投资占比目标', component: <TargetsBody data={data} setData={setData} /> },
-      { id: 'results', title: '结果预览', description: '实时查看预测与图表', component: <ResultsBody data={data} /> },
-    ],
-    [data, setData]
-  )
-
   // 列布局状态：每列包含哪些卡片 ID
-  const [columnLayout, setColumnLayout] = useState<string[][]>([
-    ['basic', 'spending', 'targets'],
-    ['salary', 'investment'],
-    ['results'],
-  ])
+  const [columnLayout, setColumnLayout] = useState<string[][]>(desktopInitialLayout)
 
   const [activeId, setActiveId] = useState<string | null>(null)
 
@@ -154,13 +125,14 @@ export default function DesktopExperience({ data, setData }: DesktopExperiencePr
     setActiveId(null)
   }
 
+  // 创建 cardMap：id -> CardConfig 的映射
   const cardMap = useMemo(
     () =>
-      initialCards.reduce((acc, card) => {
-        acc[card.id] = card
+      cardConfigs.reduce((acc, config) => {
+        acc[config.id] = config
         return acc
-      }, {} as Record<string, CardConfig>),
-    [initialCards]
+      }, {} as Record<string, typeof cardConfigs[0]>),
+    []
   )
 
   return (
@@ -214,10 +186,10 @@ export default function DesktopExperience({ data, setData }: DesktopExperiencePr
                       }}
                     >
                       {column.map((cardId) => {
-                        const card = cardMap[cardId]
+                        const config = cardMap[cardId]
                         return (
-                          <DesktopCard key={cardId} id={cardId} title={card.title} description={card.description}>
-                            {card.component}
+                          <DesktopCard key={cardId} id={cardId} title={config.title} description={config.description}>
+                            {config.component({ data, setData })}
                           </DesktopCard>
                         )
                       })}
@@ -262,7 +234,7 @@ export default function DesktopExperience({ data, setData }: DesktopExperiencePr
                     opacity: 0.7,
                   }}
                 >
-                  {cardMap[activeId].component}
+                  {cardMap[activeId].component({ data, setData })}
                 </Box>
               </CardContent>
             </Card>

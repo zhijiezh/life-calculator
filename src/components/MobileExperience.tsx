@@ -5,12 +5,7 @@ import { Button, Container, Box } from '@mui/material'
 import { CalculatorData } from '../types'
 import MobileCard from './cardWrappers/MobileCard'
 import MobileProgressHeader from './MobileProgressHeader'
-import BasicInfoBody from '../cardBodies/BasicInfoBody'
-import SalaryBody from '../cardBodies/SalaryBody'
-import SpendingBody from '../cardBodies/SpendingBody'
-import InvestmentBody from '../cardBodies/InvestmentBody'
-import TargetsBody from '../cardBodies/TargetsBody'
-import ResultsBody from '../cardBodies/ResultsBody'
+import { cardConfigs } from '../config/cardConfig'
 
 interface MobileExperienceProps {
   data: CalculatorData
@@ -18,14 +13,12 @@ interface MobileExperienceProps {
   onReset: () => void
 }
 
-const steps = [
-  { path: '/step1', title: '基础信息', Component: BasicInfoBody },
-  { path: '/step2', title: '工资收入', Component: SalaryBody },
-  { path: '/step3', title: '支出设置', Component: SpendingBody },
-  { path: '/step4', title: '投资设置', Component: InvestmentBody },
-  { path: '/step5', title: '目标设置', Component: TargetsBody },
-  { path: '/step6', title: '查看结果', Component: ResultsBody },
-]
+// 从 cardConfigs 生成移动端步骤配置
+const steps = cardConfigs.map((config, index) => ({
+  path: `/step${index + 1}`,
+  title: config.mobileTitle || config.title,
+  config,
+}))
 
 function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
   const navigate = useNavigate()
@@ -34,7 +27,7 @@ function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
 
   const currentStepIndex = steps.findIndex((s) => s.path === location.pathname)
   const currentStep = currentStepIndex >= 0 ? currentStepIndex : 0
-  const { title, Component } = steps[currentStep]
+  const { title, config } = steps[currentStep]
 
   const isLastStep = currentStep === steps.length - 1
   const isFirstStep = currentStep === 0
@@ -159,7 +152,7 @@ function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
         >
           <Container maxWidth="md" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 2 } }}>
             <MobileCard header={header} footer={footer}>
-              <Component data={data} setData={setData} />
+              {config.component({ data, setData })}
             </MobileCard>
           </Container>
         </motion.div>
