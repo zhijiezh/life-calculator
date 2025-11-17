@@ -1,13 +1,8 @@
 import { useState } from 'react'
-import { ThemeProvider, createTheme, CssBaseline } from '@mui/material'
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Step1BasicInfo from './pages/Step1BasicInfo'
-import Step2Salary from './pages/Step2Salary'
-import Step3Spending from './pages/Step3Spending'
-import Step4Investment from './pages/Step4Investment'
-import Step5Targets from './pages/Step5Targets'
-import Step6Results from './pages/Step6Results'
+import { ThemeProvider, createTheme, CssBaseline, useMediaQuery } from '@mui/material'
 import { CalculatorData } from './types'
+import DesktopExperience from './components/DesktopExperience'
+import MobileExperience from './components/MobileExperience'
 
 const theme = createTheme({
   palette: {
@@ -21,7 +16,7 @@ const theme = createTheme({
   },
 })
 
-const defaultData: CalculatorData = {
+const createDefaultData = (): CalculatorData => ({
   currency: 'USD',
   years: 15,
   initialSavings: 80000,
@@ -32,48 +27,20 @@ const defaultData: CalculatorData = {
   incomeTarget: 1095000,
   savingsTarget: 3000000,
   investmentPercentageTarget: 90,
-}
+})
 
 function App() {
-  const [data, setData] = useState<CalculatorData>(defaultData)
+  const [data, setData] = useState<CalculatorData>(() => createDefaultData())
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <HashRouter
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true,
-        }}
-      >
-        <Routes>
-          <Route path="/" element={<Navigate to="/step1" replace />} />
-          <Route
-            path="/step1"
-            element={<Step1BasicInfo data={data} setData={setData} />}
-          />
-          <Route
-            path="/step2"
-            element={<Step2Salary data={data} setData={setData} />}
-          />
-          <Route
-            path="/step3"
-            element={<Step3Spending data={data} setData={setData} />}
-          />
-          <Route
-            path="/step4"
-            element={<Step4Investment data={data} setData={setData} />}
-          />
-          <Route
-            path="/step5"
-            element={<Step5Targets data={data} setData={setData} />}
-          />
-          <Route
-            path="/step6"
-            element={<Step6Results data={data} />}
-          />
-        </Routes>
-      </HashRouter>
+      {isDesktop ? (
+        <DesktopExperience data={data} setData={setData} />
+      ) : (
+        <MobileExperience data={data} setData={setData} />
+      )}
     </ThemeProvider>
   )
 }

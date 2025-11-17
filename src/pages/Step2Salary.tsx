@@ -1,17 +1,8 @@
-import { useState, useEffect } from 'react'
-import {
-  Container,
-  Paper,
-  Typography,
-  Button,
-  Box,
-  Stepper,
-  Step,
-  StepLabel,
-} from '@mui/material'
+import { Container, Paper, Button, Stepper, Step, StepLabel } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { CalculatorData } from '../types'
-import SalaryCurveEditor from '../components/SalaryCurveEditor'
+import MobileCard from '../components/cardWrappers/MobileCard'
+import SalaryBody from '../cardBodies/SalaryBody'
 
 interface Props {
   data: CalculatorData
@@ -22,32 +13,8 @@ const steps = ['基础信息', '工资收入', '支出设置', '投资设置', '
 
 export default function Step2Salary({ data, setData }: Props) {
   const navigate = useNavigate()
-  const [salaryCurve, setSalaryCurve] = useState<Array<{ year: number; salary: number }>>(
-    data.salaryCurve.length > 0
-      ? data.salaryCurve
-      : [
-          { year: 1, salary: 120000 },
-          { year: 5, salary: 200000 },
-          { year: 10, salary: 300000 },
-          { year: 15, salary: 400000 },
-        ]
-  )
 
-  useEffect(() => {
-    // 确保数据点不超过预测年数
-    const filtered = salaryCurve.filter((point) => point.year <= data.years)
-    if (filtered.length !== salaryCurve.length) {
-      setSalaryCurve(filtered)
-    }
-  }, [data.years, salaryCurve])
-
-  const handleNext = () => {
-    setData({
-      ...data,
-      salaryCurve,
-    })
-    navigate('/step3')
-  }
+  const handleNext = () => navigate('/step3')
 
   const handleBack = () => {
     navigate('/step1')
@@ -64,27 +31,27 @@ export default function Step2Salary({ data, setData }: Props) {
       </Stepper>
 
       <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 } }}>
-        <Typography variant="h4" gutterBottom sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }}>
-          工资收入曲线
-        </Typography>
+        <MobileCard
+          topActions={
+            <Button onClick={handleBack} size="large" sx={{ display: { xs: 'inline-flex', lg: 'none' } }}>
+              上一步
+            </Button>
+          }
+          bottomBoxProps={{ sx: { display: { xs: 'flex', lg: 'none' } } }}
+          bottomActions={
+            <>
+              <Button onClick={handleBack} size="large" sx={{ minHeight: 48, flex: 1 }}>
+                上一步
+              </Button>
+              <Button variant="contained" onClick={handleNext} size="large" sx={{ minHeight: 48, flex: 1 }}>
+                下一步
+              </Button>
+            </>
+          }
+        >
+          <SalaryBody data={data} setData={setData} />
+        </MobileCard>
 
-        <Box sx={{ mb: 3 }}>
-          <SalaryCurveEditor
-            years={data.years}
-            currency={data.currency}
-            points={salaryCurve}
-            onChange={setSalaryCurve}
-          />
-        </Box>
-
-        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
-          <Button onClick={handleBack} size="large" sx={{ minHeight: 48, flex: { xs: 1, sm: 'none' } }}>
-            上一步
-          </Button>
-          <Button variant="contained" onClick={handleNext} size="large" sx={{ minHeight: 48, flex: { xs: 1, sm: 'none' } }}>
-            下一步：设置支出
-          </Button>
-        </Box>
       </Paper>
     </Container>
   )
