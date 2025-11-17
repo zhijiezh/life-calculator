@@ -1,7 +1,8 @@
-import { Container, Paper, Stepper, Step, StepLabel } from '@mui/material'
+import { Container, Paper, Stepper, Step, StepLabel, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { CalculatorData } from '../types'
-import BasicInfoCard from '../cards/BasicInfoCard'
+import BasicInfoBody from '../cardBodies/BasicInfoBody'
+import MobileCard from '../components/cardWrappers/MobileCard'
 
 interface Props {
   data: CalculatorData
@@ -26,7 +27,16 @@ export default function Step1BasicInfo({ data, setData }: Props) {
       </Stepper>
 
       <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 } }}>
-        <BasicInfoCard data={data} setData={setData} onNext={handleNext} />
+        <MobileCard
+          bottomBoxProps={{ sx: { display: { xs: 'flex', lg: 'none' } } }}
+          bottomActions={
+            <Button variant="contained" size="large" sx={{ minHeight: 48, flex: 1 }} onClick={handleNext}>
+              下一步
+            </Button>
+          }
+        >
+          <BasicInfoBody data={data} setData={setData} />
+        </MobileCard>
       </Paper>
     </Container>
   )
