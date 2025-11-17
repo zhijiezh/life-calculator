@@ -16,9 +16,21 @@ export default function InvestmentBody({ data, setData }: Props) {
     })
   }
 
+  // 阻止 Slider 的指针事件冒泡，防止触发页面拖动
+  const handlePointerDown = (e: React.PointerEvent) => {
+    e.stopPropagation()
+  }
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    e.stopPropagation()
+  }
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <Box>
+      <Box
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+      >
         <Typography gutterBottom>年投资回报率: {percentage}%</Typography>
         <Slider
           value={parseFloat(percentage)}
