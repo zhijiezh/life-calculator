@@ -82,7 +82,6 @@ export function lifeCalculator(data: CalculatorData): CalculationResult {
   savings[0] = initialSavings
 
   for (let i = 0; i < years; i++) {
-    const year = yearsArray[i]
     const salary = salaryArr[i]
     const spending = spendingArr[i]
 

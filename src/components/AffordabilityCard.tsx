@@ -44,7 +44,7 @@ export default function AffordabilityCard({
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                 {affordability.canAffordMultiple
-                  .filter((item, index) => index % 2 === 0) // 只显示部分年份，避免太多
+                  .filter((_item, index) => index % 2 === 0) // 只显示部分年份，避免太多
                   .slice(0, 5)
                   .map((item) => (
                     <Typography key={item.year} variant="body2" sx={{ opacity: 0.9 }}>

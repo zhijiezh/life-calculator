@@ -22,16 +22,13 @@ interface Props {
 export default function SalaryCurveEditor({ years, currency, points, onChange }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
-  const [chartHeight, setChartHeight] = useState(400)
   const [isMobile, setIsMobile] = useState(false)
 
-  // 根据屏幕大小设置图表高度 - 移动端使用更大的高度
+  // 根据屏幕大小设置移动端标识
   useEffect(() => {
     const updateSize = () => {
       const mobile = window.innerWidth < 600
       setIsMobile(mobile)
-      // 移动端使用更大的高度，确保图表清晰可见
-      setChartHeight(mobile ? 450 : 500)
     }
     updateSize()
     window.addEventListener('resize', updateSize)
@@ -205,7 +202,7 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
           点击图表上的点或下方输入框编辑，点击 + 添加新点
         </Typography>
         <IconButton 
-          onClick={handleAddPoint} 
+          onClick={() => handleAddPoint()} 
           size="medium" 
           color="primary"
           sx={{ 
@@ -274,11 +271,14 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
                 strokeWidth={isMobile ? 3 : 2}
                 dot={<CustomDot />}
                 activeDot={{ r: isMobile ? 10 : 8 }}
-                onClick={(data: any, index: number) => {
+                onClick={(event: any) => {
                   // 点击线条时，检查是否有现有点，没有则添加新点
-                  const clickedYear = chartData[index]?.year
-                  if (clickedYear) {
-                    handleAddPoint(clickedYear)
+                  if (event && event.activePayload && event.activePayload[0]) {
+                    const clickedData = event.activePayload[0].payload
+                    const clickedYear = clickedData?.year
+                    if (clickedYear) {
+                      handleAddPoint(clickedYear)
+                    }
                   }
                 }}
               />
@@ -290,7 +290,7 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
           <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
             {points
               .sort((a, b) => a.year - b.year)
-              .map((point, originalIndex) => {
+              .map((point) => {
                 const index = points.findIndex((p) => p === point)
                 const isEditing = editingIndex === index
                 return (
