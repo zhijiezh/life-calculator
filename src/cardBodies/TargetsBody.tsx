@@ -59,40 +59,26 @@ export default function TargetsBody({ data, setData }: Props) {
         onPointerMove={handlePointerMove}
       >
         <Typography gutterBottom>投资收入占比目标: {data.investmentPercentageTarget}%</Typography>
-        <Slider
-          value={data.investmentPercentageTarget}
-          onChange={(_, val) => handlePercentageChange(val as number)}
-          min={0}
-          max={100}
-          step={1}
-          marks={[
-            { value: 0, label: '0%' },
-            { value: 25, label: '25%' },
-            { value: 50, label: '50%' },
-            { value: 75, label: '75%' },
-            { value: 100, label: '100%' },
-          ]}
-        />
+        <Box sx={{ px: 1.2}}>
+          <Slider
+            value={data.investmentPercentageTarget}
+            onChange={(_, val) => handlePercentageChange(val as number)}
+            min={0}
+            max={100}
+            step={1}
+            marks={[
+              { value: 0, label: '0%' },
+              { value: 25, label: '25%' },
+              { value: 50, label: '50%' },
+              { value: 75, label: '75%' },
+              { value: 100, label: '100%' },
+            ]}
+          />
+        </Box>
         <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
           希望投资收入占总收入的百分比
         </Typography>
       </Box>
-
-      <NumberField
-        label="投资收入占比目标"
-        defaultValue={data.investmentPercentageTarget}
-        onValueChange={(value) => {
-          if (value !== null) {
-            setData({ ...data, investmentPercentageTarget: value })
-          }
-        }}
-        min={0}
-        max={100}
-        step={1}
-        helperText="也可以直接输入数值"
-        fullWidth
-        endAdornment="%"
-      />
     </Box>
   )
 }

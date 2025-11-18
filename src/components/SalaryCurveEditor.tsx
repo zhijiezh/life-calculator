@@ -200,7 +200,7 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
         <Typography variant="body2" color="text.secondary" sx={{ flex: 1, minWidth: 200 }}>
-          点击图表上的点或下方输入框编辑，点击 + 添加新点
+          点击下方输入框编辑，点击 + 添加新点
         </Typography>
         <IconButton 
           onClick={() => handleAddPoint()} 
