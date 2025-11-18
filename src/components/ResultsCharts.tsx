@@ -66,12 +66,11 @@ export default function ResultsCharts({
         <Box 
           sx={{ 
             width: '100%', 
-            height: { xs: 250, sm: 300 },
-            minHeight: { xs: 250, sm: 300 },
-            overflowX: 'auto'
+            overflowX: 'auto',
+            overflowY: 'hidden',  // 禁止垂直滚动
           }}
         >
-          <ResponsiveContainer width="100%" height={300} minWidth={300} debounce={200}>
+          <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
@@ -107,19 +106,18 @@ export default function ResultsCharts({
       </Paper>
 
       {/* 总储蓄对比图（有投资 vs 无投资） */}
-      <Paper variant="outlined" sx={{ p: 2, mb: 3 }}>
+      <Paper variant="outlined" sx={{ p: 2, mb: 3, overflow: 'hidden' }}>
         <Typography variant="subtitle1" gutterBottom>
           总储蓄对比：有投资 vs 无投资
         </Typography>
         <Box 
           sx={{ 
             width: '100%', 
-            height: { xs: 250, sm: 300 },
-            minHeight: { xs: 250, sm: 300 },
-            overflowX: 'auto'
+            overflowX: 'auto',
+            overflowY: 'hidden',  // 禁止垂直滚动
           }}
         >
-          <ResponsiveContainer width="100%" height={300} minWidth={300} debounce={200}>
+          <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
@@ -170,12 +168,11 @@ export default function ResultsCharts({
         <Box 
           sx={{ 
             width: '100%', 
-            height: { xs: 250, sm: 300 },
-            minHeight: { xs: 250, sm: 300 },
-            overflowX: 'auto'
+            overflowX: 'auto',
+            overflowY: 'hidden',  // 禁止垂直滚动
           }}
         >
-          <ResponsiveContainer width="100%" height={300} minWidth={300} debounce={200}>
+          <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
@@ -216,12 +213,11 @@ export default function ResultsCharts({
         <Box 
           sx={{ 
             width: '100%', 
-            height: { xs: 250, sm: 300 },
-            minHeight: { xs: 250, sm: 300 },
-            overflowX: 'auto'
+            overflowX: 'auto',
+            overflowY: 'hidden',  // 禁止垂直滚动
           }}
         >
-          <ResponsiveContainer width="100%" height={300} minWidth={300} debounce={200}>
+          <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
