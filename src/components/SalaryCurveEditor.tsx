@@ -8,10 +8,11 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts'
-import { Box, Paper, Typography, IconButton } from '@mui/material'
+import { Box, Typography, IconButton, Paper } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
 import NumberField from './NumberField'
+import ChartContainer from './ChartContainer'
 
 interface Props {
   years: number
@@ -216,16 +217,9 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
       </Box>
 
       <Paper variant="outlined" sx={{ p: { xs: 1, sm: 2 } }}>
-        <div ref={containerRef} style={{ position: 'relative' }}>
-          <Box 
-            sx={{ 
-              width: '100%', 
-              height: { xs: 450, sm: 500 },
-              minHeight: { xs: 450, sm: 500 },
-              overflow: 'hidden'
-            }}
-          >
-            <ResponsiveContainer width="100%" height="100%" debounce={200}>
+        <ChartContainer>
+          <div ref={containerRef} style={{ position: 'relative' }}>
+            <ResponsiveContainer width="100%" height={500} minWidth={300} debounce={200}>
             <LineChart 
               data={chartData} 
               margin={{ 
@@ -284,10 +278,11 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
                 }}
               />
             </LineChart>
-          </ResponsiveContainer>
-          </Box>
+            </ResponsiveContainer>
+          </div>
+        </ChartContainer>
 
-          {/* 显示数据点编辑 */}
+        {/* 显示数据点编辑 */}
           <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
             {points
               .sort((a, b) => a.year - b.year)
@@ -356,7 +351,6 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
                 )
               })}
           </Box>
-        </div>
       </Paper>
     </Box>
   )

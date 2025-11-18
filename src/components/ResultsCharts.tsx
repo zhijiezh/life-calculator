@@ -1,5 +1,5 @@
-import { useMemo, ReactNode } from 'react'
-import { Box, Paper, Typography } from '@mui/material'
+import { useMemo } from 'react'
+import { Box, Typography } from '@mui/material'
 import {
   LineChart,
   Line,
@@ -12,6 +12,7 @@ import {
   ReferenceLine,
 } from 'recharts'
 import { CalculationResult, CalculatorData } from '../types'
+import ChartContainer from './ChartContainer'
 
 interface Props {
   result: CalculationResult
@@ -19,26 +20,6 @@ interface Props {
   incomeTargetYear: number | null
   savingsTargetYear: number | null
   investmentPercentageTargetYear: number | null
-}
-
-// 可复用的图表容器组件
-function ChartContainer({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <Paper variant="outlined" sx={{ p: 2, mb: 3 }}>
-      <Typography variant="subtitle1" gutterBottom>
-        {title}
-      </Typography>
-      <Box 
-        sx={{ 
-          width: '100%', 
-          overflowX: 'auto',
-          overflowY: 'hidden',
-        }}
-      >
-        {children}
-      </Box>
-    </Paper>
-  )
 }
 
 export default function ResultsCharts({
