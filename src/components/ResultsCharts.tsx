@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, ReactNode } from 'react'
 import { Box, Paper, Typography } from '@mui/material'
 import {
   LineChart,
@@ -19,6 +19,26 @@ interface Props {
   incomeTargetYear: number | null
   savingsTargetYear: number | null
   investmentPercentageTargetYear: number | null
+}
+
+// 可复用的图表容器组件
+function ChartContainer({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <Paper variant="outlined" sx={{ p: 2, mb: 3 }}>
+      <Typography variant="subtitle1" gutterBottom>
+        {title}
+      </Typography>
+      <Box 
+        sx={{ 
+          width: '100%', 
+          overflowX: 'auto',
+          overflowY: 'hidden',
+        }}
+      >
+        {children}
+      </Box>
+    </Paper>
+  )
 }
 
 export default function ResultsCharts({
@@ -59,18 +79,8 @@ export default function ResultsCharts({
       </Typography>
 
       {/* 净收入图 */}
-      <Paper variant="outlined" sx={{ p: 2, mb: 3 }}>
-        <Typography variant="subtitle1" gutterBottom>
-          年净收入趋势
-        </Typography>
-        <Box 
-          sx={{ 
-            width: '100%', 
-            overflowX: 'auto',
-            overflowY: 'hidden',  // 禁止垂直滚动
-          }}
-        >
-          <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
+      <ChartContainer title="年净收入趋势">
+        <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
@@ -102,22 +112,11 @@ export default function ResultsCharts({
             )}
           </LineChart>
         </ResponsiveContainer>
-        </Box>
-      </Paper>
+      </ChartContainer>
 
       {/* 总储蓄对比图（有投资 vs 无投资） */}
-      <Paper variant="outlined" sx={{ p: 2, mb: 3, overflow: 'hidden' }}>
-        <Typography variant="subtitle1" gutterBottom>
-          总储蓄对比：有投资 vs 无投资
-        </Typography>
-        <Box 
-          sx={{ 
-            width: '100%', 
-            overflowX: 'auto',
-            overflowY: 'hidden',  // 禁止垂直滚动
-          }}
-        >
-          <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
+      <ChartContainer title="总储蓄对比：有投资 vs 无投资">
+        <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
@@ -157,22 +156,11 @@ export default function ResultsCharts({
             )}
           </LineChart>
         </ResponsiveContainer>
-        </Box>
-      </Paper>
+      </ChartContainer>
 
       {/* 收入构成图 */}
-      <Paper variant="outlined" sx={{ p: 2, mb: 3 }}>
-        <Typography variant="subtitle1" gutterBottom>
-          收入构成
-        </Typography>
-        <Box 
-          sx={{ 
-            width: '100%', 
-            overflowX: 'auto',
-            overflowY: 'hidden',  // 禁止垂直滚动
-          }}
-        >
-          <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
+      <ChartContainer title="收入构成">
+        <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
@@ -202,22 +190,11 @@ export default function ResultsCharts({
             />
           </LineChart>
         </ResponsiveContainer>
-        </Box>
-      </Paper>
+      </ChartContainer>
 
       {/* 投资收入占比图 */}
-      <Paper variant="outlined" sx={{ p: 2 }}>
-        <Typography variant="subtitle1" gutterBottom>
-          投资收入占比趋势
-        </Typography>
-        <Box 
-          sx={{ 
-            width: '100%', 
-            overflowX: 'auto',
-            overflowY: 'hidden',  // 禁止垂直滚动
-          }}
-        >
-          <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
+      <ChartContainer title="投资收入占比趋势">
+        <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
@@ -249,8 +226,7 @@ export default function ResultsCharts({
             )}
           </LineChart>
         </ResponsiveContainer>
-        </Box>
-      </Paper>
+      </ChartContainer>
     </Box>
   )
 }
