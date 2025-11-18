@@ -1,4 +1,5 @@
-import { Box, TextField, MenuItem, FormControl, InputLabel, Select } from '@mui/material'
+import { Box, MenuItem, FormControl, InputLabel, Select } from '@mui/material'
+import NumberField from '../components/NumberField'
 import { CalculatorData } from '../types'
 
 interface Props {
@@ -11,22 +12,6 @@ export default function BasicInfoBody({ data, setData }: Props) {
     setData({
       ...data,
       currency: value,
-    })
-  }
-
-  const handleYearsChange = (value: string) => {
-    const parsed = parseInt(value, 10)
-    setData({
-      ...data,
-      years: isNaN(parsed) ? data.years : parsed,
-    })
-  }
-
-  const handleSavingsChange = (value: string) => {
-    const parsed = parseFloat(value)
-    setData({
-      ...data,
-      initialSavings: isNaN(parsed) ? data.initialSavings : parsed,
     })
   }
 
@@ -46,22 +31,32 @@ export default function BasicInfoBody({ data, setData }: Props) {
         </Select>
       </FormControl>
 
-      <TextField
+      <NumberField
         label="预测年数"
-        type="number"
-        value={data.years}
-        onChange={(e) => handleYearsChange(e.target.value)}
-        inputProps={{ min: 1, max: 50 }}
+        defaultValue={data.years}
+        onValueChange={(value) => {
+          // 只在值不为 null 时更新外部状态
+          if (value !== null) {
+            setData({ ...data, years: value })
+          }
+        }}
+        min={1}
+        max={50}
+        step={1}
         helperText="预测未来多少年的财务状况"
         fullWidth
       />
 
-      <TextField
+      <NumberField
         label="初始存款"
-        type="number"
-        value={data.initialSavings}
-        onChange={(e) => handleSavingsChange(e.target.value)}
-        inputProps={{ min: 0, step: 1000 }}
+        defaultValue={data.initialSavings}
+        onValueChange={(value) => {
+          if (value !== null) {
+            setData({ ...data, initialSavings: value })
+          }
+        }}
+        min={0}
+        step={1000}
         helperText={`当前已有的存款金额 (${data.currency})`}
         fullWidth
       />

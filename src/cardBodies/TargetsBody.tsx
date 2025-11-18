@@ -1,4 +1,5 @@
-import { Box, TextField, Slider, Typography } from '@mui/material'
+import { Box, Slider, Typography } from '@mui/material'
+import NumberField from '../components/NumberField'
 import { CalculatorData } from '../types'
 
 interface Props {
@@ -7,14 +8,6 @@ interface Props {
 }
 
 export default function TargetsBody({ data, setData }: Props) {
-  const handleChange = (field: keyof CalculatorData) => (value: string) => {
-    const parsed = parseFloat(value)
-    setData({
-      ...data,
-      [field]: isNaN(parsed) ? data[field] : parsed,
-    })
-  }
-
   const handlePercentageChange = (value: number) => {
     setData({
       ...data,
@@ -33,22 +26,30 @@ export default function TargetsBody({ data, setData }: Props) {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <TextField
+      <NumberField
         label="年净收入目标"
-        type="number"
-        value={data.incomeTarget}
-        onChange={(e) => handleChange('incomeTarget')(e.target.value)}
-        inputProps={{ min: 0, step: 1000 }}
+        defaultValue={data.incomeTarget}
+        onValueChange={(value) => {
+          if (value !== null) {
+            setData({ ...data, incomeTarget: value })
+          }
+        }}
+        min={0}
+        step={1000}
         helperText={`希望达到的年净收入目标 (${data.currency})`}
         fullWidth
       />
 
-      <TextField
+      <NumberField
         label="总储蓄目标"
-        type="number"
-        value={data.savingsTarget}
-        onChange={(e) => handleChange('savingsTarget')(e.target.value)}
-        inputProps={{ min: 0, step: 10000 }}
+        defaultValue={data.savingsTarget}
+        onValueChange={(value) => {
+          if (value !== null) {
+            setData({ ...data, savingsTarget: value })
+          }
+        }}
+        min={0}
+        step={10000}
         helperText={`希望达到的总储蓄目标 (${data.currency})`}
         fullWidth
       />
@@ -77,17 +78,20 @@ export default function TargetsBody({ data, setData }: Props) {
         </Typography>
       </Box>
 
-      <TextField
+      <NumberField
         label="投资收入占比目标"
-        type="number"
-        value={data.investmentPercentageTarget}
-        onChange={(e) => handleChange('investmentPercentageTarget')(e.target.value)}
-        inputProps={{ min: 0, max: 100, step: 1 }}
+        defaultValue={data.investmentPercentageTarget}
+        onValueChange={(value) => {
+          if (value !== null) {
+            setData({ ...data, investmentPercentageTarget: value })
+          }
+        }}
+        min={0}
+        max={100}
+        step={1}
         helperText="也可以直接输入数值"
         fullWidth
-        InputProps={{
-          endAdornment: '%',
-        }}
+        endAdornment="%"
       />
     </Box>
   )

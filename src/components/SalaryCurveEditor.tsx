@@ -8,9 +8,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts'
-import { Box, Paper, Typography, IconButton, TextField } from '@mui/material'
+import { Box, Paper, Typography, IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
+import NumberField from './NumberField'
 
 interface Props {
   years: number
@@ -306,30 +307,37 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
                       flexWrap: 'wrap',
                     }}
                   >
-                    <TextField
-                      size="small"
-                      label="年份"
-                      type="number"
-                      value={point.year}
-                      onChange={(e) =>
-                        handlePointChange(index, 'year', parseInt(e.target.value) || 1)
-                      }
-                      inputProps={{ min: 1, max: years }}
-                      sx={{ width: 100 }}
-                      onClick={() => setEditingIndex(index)}
-                    />
-                    <TextField
-                      size="small"
-                      label="工资"
-                      type="number"
-                      value={point.salary}
-                      onChange={(e) =>
-                        handlePointChange(index, 'salary', parseFloat(e.target.value) || 0)
-                      }
-                      inputProps={{ min: 0, step: 1000 }}
-                      sx={{ flex: 1, minWidth: 150 }}
-                      onClick={() => setEditingIndex(index)}
-                    />
+                    <Box sx={{ width: 100 }} onClick={() => setEditingIndex(index)}>
+                      <NumberField
+                        size="small"
+                        label="年份"
+                        defaultValue={point.year}
+                        onValueChange={(value) => {
+                          if (value !== null) {
+                            handlePointChange(index, 'year', value)
+                          }
+                        }}
+                        min={1}
+                        max={years}
+                        step={1}
+                        fullWidth
+                      />
+                    </Box>
+                    <Box sx={{ flex: 1, minWidth: 150 }} onClick={() => setEditingIndex(index)}>
+                      <NumberField
+                        size="small"
+                        label="工资"
+                        defaultValue={point.salary}
+                        onValueChange={(value) => {
+                          if (value !== null) {
+                            handlePointChange(index, 'salary', value)
+                          }
+                        }}
+                        min={0}
+                        step={1000}
+                        fullWidth
+                      />
+                    </Box>
                     <Typography variant="caption" sx={{ minWidth: 100 }}>
                       {formatCurrency(point.salary)}
                     </Typography>
