@@ -61,7 +61,7 @@ export default function ResultsCharts({
 
       {/* 净收入图 */}
       <ChartContainer title="年净收入趋势">
-        <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
+        <ResponsiveContainer width="100%" height={380} debounce={200}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
@@ -97,7 +97,7 @@ export default function ResultsCharts({
 
       {/* 总储蓄对比图（有投资 vs 无投资） */}
       <ChartContainer title="总储蓄对比：有投资 vs 无投资">
-        <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
+        <ResponsiveContainer width="100%" height={380} debounce={200}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
@@ -141,7 +141,7 @@ export default function ResultsCharts({
 
       {/* 收入构成图 */}
       <ChartContainer title="收入构成">
-        <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
+        <ResponsiveContainer width="100%" height={380} debounce={200}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
@@ -175,7 +175,7 @@ export default function ResultsCharts({
 
       {/* 投资收入占比图 */}
       <ChartContainer title="投资收入占比趋势">
-        <ResponsiveContainer width="100%" height={380} minWidth={300} debounce={200}>
+        <ResponsiveContainer width="100%" height={380} debounce={200}>
           <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />

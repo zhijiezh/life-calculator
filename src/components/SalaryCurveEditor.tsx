@@ -219,7 +219,7 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
       <Paper variant="outlined" sx={{ p: { xs: 1, sm: 2 } }}>
         <ChartContainer>
           <div ref={containerRef} style={{ position: 'relative' }}>
-            <ResponsiveContainer width="100%" height={500} minWidth={300} debounce={200}>
+            <ResponsiveContainer width="100%" height={500} debounce={200}>
             <LineChart 
               data={chartData} 
               margin={{ 
