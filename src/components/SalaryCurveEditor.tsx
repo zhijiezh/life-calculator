@@ -303,15 +303,15 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
                     }}
                   >
                     <Box sx={{ width: 100 }} onClick={() => setEditingIndex(index)}>
-                      <NumberField
-                        size="small"
-                        label="年份"
-                        defaultValue={point.year}
-                        onValueChange={(value) => {
-                          if (value !== null) {
-                            handlePointChange(index, 'year', value)
-                          }
-                        }}
+                        <NumberField
+                          size="small"
+                          label="年份"
+                          defaultValue={point.year}
+                          onValueChange={(value: number | null) => {
+                            if (value !== null) {
+                              handlePointChange(index, 'year', value)
+                            }
+                          }}
                         min={1}
                         max={years}
                         step={1}
@@ -319,15 +319,15 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
                       />
                     </Box>
                     <Box sx={{ flex: 1, minWidth: 150 }} onClick={() => setEditingIndex(index)}>
-                      <NumberField
-                        size="small"
-                        label="工资"
-                        defaultValue={point.salary}
-                        onValueChange={(value) => {
-                          if (value !== null) {
-                            handlePointChange(index, 'salary', value)
-                          }
-                        }}
+                        <NumberField
+                          size="small"
+                          label="工资"
+                          defaultValue={point.salary}
+                          onValueChange={(value: number | null) => {
+                            if (value !== null) {
+                              handlePointChange(index, 'salary', value)
+                            }
+                          }}
                         min={0}
                         step={1000}
                         fullWidth

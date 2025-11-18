@@ -1,4 +1,5 @@
 import * as React from 'react'
+// @ts-ignore - Base UI types may not be fully available
 import { NumberField as BaseNumberField } from '@base-ui-components/react/number-field'
 import IconButton from '@mui/material/IconButton'
 import FormControl from '@mui/material/FormControl'
@@ -43,7 +44,7 @@ export default function NumberField({
     <BaseNumberField.Root
       allowWheelScrub
       {...other}
-      render={(props, state) => (
+      render={(props: any, state: any) => (
         <FormControl
           size={size}
           ref={props.ref}
@@ -61,7 +62,7 @@ export default function NumberField({
       <InputLabel htmlFor={id}>{label}</InputLabel>
       <BaseNumberField.Input
         id={id}
-        render={(props, state) => (
+        render={(props: any, state: any) => (
           <OutlinedInput
             label={label}
             inputRef={props.ref}

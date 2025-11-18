@@ -10,28 +10,28 @@ interface Props {
 export default function SpendingBody({ data, setData }: Props) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <NumberField
-        label="当前年支出"
-        defaultValue={data.baseSpending}
-        onValueChange={(value) => {
-          if (value !== null) {
-            setData({ ...data, baseSpending: value })
-          }
-        }}
+            <NumberField
+              label="当前年支出"
+              defaultValue={data.baseSpending}
+              onValueChange={(value: number | null) => {
+                if (value !== null) {
+                  setData({ ...data, baseSpending: value })
+                }
+              }}
         min={0}
         step={1000}
         helperText={`每年的基础支出金额 (${data.currency})`}
         fullWidth
       />
 
-      <NumberField
-        label="年通货膨胀率"
-        defaultValue={data.inflationRate * 100}
-        onValueChange={(value) => {
-          if (value !== null) {
-            setData({ ...data, inflationRate: value / 100 })
-          }
-        }}
+            <NumberField
+              label="年通货膨胀率"
+              defaultValue={data.inflationRate * 100}
+              onValueChange={(value: number | null) => {
+                if (value !== null) {
+                  setData({ ...data, inflationRate: value / 100 })
+                }
+              }}
         min={0}
         max={20}
         step={0.1}

@@ -34,7 +34,7 @@ export default function BasicInfoBody({ data, setData }: Props) {
       <NumberField
         label="预测年数"
         defaultValue={data.years}
-        onValueChange={(value) => {
+        onValueChange={(value: number | null) => {
           // 只在值不为 null 时更新外部状态
           if (value !== null) {
             setData({ ...data, years: value })
@@ -47,14 +47,14 @@ export default function BasicInfoBody({ data, setData }: Props) {
         fullWidth
       />
 
-      <NumberField
-        label="初始存款"
-        defaultValue={data.initialSavings}
-        onValueChange={(value) => {
-          if (value !== null) {
-            setData({ ...data, initialSavings: value })
-          }
-        }}
+            <NumberField
+              label="初始存款"
+              defaultValue={data.initialSavings}
+              onValueChange={(value: number | null) => {
+                if (value !== null) {
+                  setData({ ...data, initialSavings: value })
+                }
+              }}
         min={0}
         step={1000}
         helperText={`当前已有的存款金额 (${data.currency})`}

@@ -26,28 +26,28 @@ export default function TargetsBody({ data, setData }: Props) {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <NumberField
-        label="年净收入目标"
-        defaultValue={data.incomeTarget}
-        onValueChange={(value) => {
-          if (value !== null) {
-            setData({ ...data, incomeTarget: value })
-          }
-        }}
+            <NumberField
+              label="年净收入目标"
+              defaultValue={data.incomeTarget}
+              onValueChange={(value: number | null) => {
+                if (value !== null) {
+                  setData({ ...data, incomeTarget: value })
+                }
+              }}
         min={0}
         step={1000}
         helperText={`希望达到的年净收入目标 (${data.currency})`}
         fullWidth
       />
 
-      <NumberField
-        label="总储蓄目标"
-        defaultValue={data.savingsTarget}
-        onValueChange={(value) => {
-          if (value !== null) {
-            setData({ ...data, savingsTarget: value })
-          }
-        }}
+            <NumberField
+              label="总储蓄目标"
+              defaultValue={data.savingsTarget}
+              onValueChange={(value: number | null) => {
+                if (value !== null) {
+                  setData({ ...data, savingsTarget: value })
+                }
+              }}
         min={0}
         step={10000}
         helperText={`希望达到的总储蓄目标 (${data.currency})`}
