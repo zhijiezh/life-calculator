@@ -1,4 +1,4 @@
-import { Box, TextField } from '@mui/material'
+import { Box, TextField, Slider, Typography } from '@mui/material'
 import { CalculatorData } from '../types'
 
 interface Props {
@@ -13,6 +13,22 @@ export default function TargetsBody({ data, setData }: Props) {
       ...data,
       [field]: isNaN(parsed) ? data[field] : parsed,
     })
+  }
+
+  const handlePercentageChange = (value: number) => {
+    setData({
+      ...data,
+      investmentPercentageTarget: value,
+    })
+  }
+
+  // 阻止 Slider 的指针事件冒泡，防止触发页面拖动
+  const handlePointerDown = (e: React.PointerEvent) => {
+    e.stopPropagation()
+  }
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    e.stopPropagation()
   }
 
   return (
@@ -37,13 +53,37 @@ export default function TargetsBody({ data, setData }: Props) {
         fullWidth
       />
 
+      <Box
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+      >
+        <Typography gutterBottom>投资收入占比目标: {data.investmentPercentageTarget}%</Typography>
+        <Slider
+          value={data.investmentPercentageTarget}
+          onChange={(_, val) => handlePercentageChange(val as number)}
+          min={0}
+          max={100}
+          step={1}
+          marks={[
+            { value: 0, label: '0%' },
+            { value: 25, label: '25%' },
+            { value: 50, label: '50%' },
+            { value: 75, label: '75%' },
+            { value: 100, label: '100%' },
+          ]}
+        />
+        <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+          希望投资收入占总收入的百分比
+        </Typography>
+      </Box>
+
       <TextField
         label="投资收入占比目标"
         type="number"
         value={data.investmentPercentageTarget}
         onChange={(e) => handleChange('investmentPercentageTarget')(e.target.value)}
         inputProps={{ min: 0, max: 100, step: 1 }}
-        helperText="希望投资收入占总收入的百分比（例如：90 表示 90%）"
+        helperText="也可以直接输入数值"
         fullWidth
         InputProps={{
           endAdornment: '%',
