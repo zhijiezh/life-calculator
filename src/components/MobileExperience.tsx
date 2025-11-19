@@ -177,16 +177,13 @@ export default function MobileExperience({ data, setData }: MobileExperienceProp
         bgcolor: 'background.default',
       }}
     >
-      {/* Top Section: Charts (40%) */}
-      <Box sx={{ height: '40%', borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
+      {/* Top Section: Charts (60%) */}
+      <Box sx={{ height: '50%', borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
         <SimpleSwiper
           items={chartCards}
           renderItem={(config) => (
-            <Box sx={{ width: '100%', height: '100%', p: 2, overflow: 'hidden' }}>
-              <Typography variant="subtitle2" align="center" gutterBottom color="text.secondary">
-                {config.mobileTitle || config.title}
-              </Typography>
-              <Box sx={{ flex: 1, height: 'calc(100% - 30px)', overflow: 'hidden' }}>
+            <Box sx={{ width: '100%', height: '100%', p: 1.5, overflow: 'hidden' }}>
+              <Box sx={{ flex: 1, height: 'calc(100% - 24px)', overflow: 'hidden' }}>
                 {config.component({ data, setData })}
               </Box>
             </Box>
@@ -194,16 +191,16 @@ export default function MobileExperience({ data, setData }: MobileExperienceProp
         />
       </Box>
 
-      {/* Bottom Section: Inputs (60%) */}
-      <Box sx={{ height: '60%', bgcolor: 'background.default' }}>
+      {/* Bottom Section: Inputs (40%) */}
+      <Box sx={{ height: '50%', bgcolor: 'background.default' }}>
         <SimpleSwiper
           items={inputCards}
           renderItem={(config) => (
-            <Box sx={{ width: '100%', height: '100%', p: 2, overflowY: 'auto' }}>
+            <Box sx={{ width: '100%', height: '100%', p: 1.5, overflowY: 'auto' }}>
               <Paper
                 elevation={0}
                 sx={{
-                  p: 3,
+                  px: 2,
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
@@ -211,13 +208,13 @@ export default function MobileExperience({ data, setData }: MobileExperienceProp
                   bgcolor: 'background.paper',
                 }}
               >
-                <Typography variant="h6" gutterBottom color="primary">
+                <Typography variant="subtitle2" gutterBottom color="primary" sx={{ mb: 1 }}>
                   {config.mobileTitle || config.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                <Typography variant="caption" color="text.secondary" sx={{ mb: 2 }}>
                   {config.description}
                 </Typography>
-                <Box sx={{ flex: 1, overflowY: 'auto' }}>{config.component({ data, setData })}</Box>
+                <Box sx={{ flex: 1, overflowY: 'auto'}}>{config.component({ data, setData })}</Box>
               </Paper>
             </Box>
           )}

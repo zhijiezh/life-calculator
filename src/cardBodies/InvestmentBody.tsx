@@ -9,7 +9,7 @@ interface Props {
 
 export default function InvestmentBody({ data, setData }: Props) {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1 }}>
             <NumberField
               label="年投资回报率"
               defaultValue={data.investmentReturnRate * 100}
@@ -23,6 +23,19 @@ export default function InvestmentBody({ data, setData }: Props) {
         helperText="投资每年产生的回报百分比（提示：历史平均股票市场年回报率约为 7-10%）"
         fullWidth
         endAdornment="%"
+      />
+      <NumberField
+              label="初始存款"
+              defaultValue={data.initialSavings}
+              onValueChange={(value: number | null) => {
+                if (value !== null) {
+                  setData({ ...data, initialSavings: value })
+                }
+              }}
+        min={0}
+        step={1000}
+        helperText={`当前已有的存款金额 (${data.currency})`}
+        fullWidth
       />
     </Box>
   )

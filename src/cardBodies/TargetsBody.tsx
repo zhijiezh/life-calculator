@@ -25,7 +25,7 @@ export default function TargetsBody({ data, setData }: Props) {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 , pt: 1}}>
             <NumberField
               label="年净收入目标"
               defaultValue={data.incomeTarget}

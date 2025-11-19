@@ -9,7 +9,7 @@ interface Props {
 
 export default function SpendingBody({ data, setData }: Props) {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 , pt: 1}}>
             <NumberField
               label="当前年支出"
               defaultValue={data.baseSpending}
