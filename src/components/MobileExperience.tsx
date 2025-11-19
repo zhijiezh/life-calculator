@@ -14,11 +14,13 @@ interface MobileExperienceProps {
 }
 
 // 从 cardConfigs 生成移动端步骤配置
-const steps = cardConfigs.map((config, index) => ({
-  path: `/step${index + 1}`,
-  title: config.mobileTitle || config.title,
-  config,
-}))
+const steps = cardConfigs
+  .filter((config) => !config.hiddenOnMobile)
+  .map((config) => ({
+    path: `/step${cardConfigs.indexOf(config) + 1}`,
+    title: config.mobileTitle || config.title,
+    config,
+  }))
 
 function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
   const navigate = useNavigate()

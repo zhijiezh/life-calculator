@@ -6,12 +6,19 @@ import SpendingBody from '../cardBodies/SpendingBody'
 import InvestmentBody from '../cardBodies/InvestmentBody'
 import TargetsBody from '../cardBodies/TargetsBody'
 import ResultsBody from '../cardBodies/ResultsBody'
+import ResultsSummaryBody from '../cardBodies/ResultsSummaryBody'
+import NetIncomeChart from '../cardBodies/charts/NetIncomeChart'
+import TotalSavingsChart from '../cardBodies/charts/TotalSavingsChart'
+import IncomeCompositionChart from '../cardBodies/charts/IncomeCompositionChart'
+import InvestmentPercentageChart from '../cardBodies/charts/InvestmentPercentageChart'
+import { lifeCalculator, findFirstYear } from '../utils/calculator'
 
 export interface CardConfig {
   id: string
   title: string
   description: string
   mobileTitle?: string // 如果 mobile 需要不同的标题
+  hiddenOnMobile?: boolean // 如果为 true，则在移动端不显示
   component: (props: CardBodyProps) => ReactNode
 }
 
@@ -68,6 +75,66 @@ export const cardConfigs: CardConfig[] = [
     mobileTitle: '查看结果',
     component: (props) => <ResultsBody {...props} />,
   },
+  {
+    id: 'results_summary',
+    title: '结果概览',
+    description: '核心指标与目标达成情况',
+    hiddenOnMobile: true,
+    component: (props) => <ResultsSummaryBody {...props} />,
+  },
+  {
+    id: 'chart_net_income',
+    title: '年净收入趋势',
+    description: '每年净收入的变化趋势',
+    hiddenOnMobile: true,
+    component: (props) => {
+      const result = lifeCalculator(props.data)
+      const incomeTargetYear = findFirstYear(result, 'netIncome', props.data.incomeTarget)
+      return <NetIncomeChart result={result} data={props.data} incomeTargetYear={incomeTargetYear} />
+    },
+  },
+  {
+    id: 'chart_total_savings',
+    title: '总储蓄对比',
+    description: '有投资与无投资的总储蓄对比',
+    hiddenOnMobile: true,
+    component: (props) => {
+      const result = lifeCalculator(props.data)
+      const savingsTargetYear = findFirstYear(result, 'totalSavings', props.data.savingsTarget)
+      return <TotalSavingsChart result={result} data={props.data} savingsTargetYear={savingsTargetYear} />
+    },
+  },
+  {
+    id: 'chart_income_composition',
+    title: '收入构成',
+    description: '工资收入、投资收入与支出的构成',
+    hiddenOnMobile: true,
+    component: (props) => {
+      const result = lifeCalculator(props.data)
+      return <IncomeCompositionChart result={result} data={props.data} />
+    },
+  },
+  {
+    id: 'chart_investment_percentage',
+    title: '投资收入占比',
+    description: '投资收入占总收入的比例趋势',
+    hiddenOnMobile: true,
+    component: (props) => {
+      const result = lifeCalculator(props.data)
+      const investmentPercentageTargetYear = findFirstYear(
+        result,
+        'investmentPercentage',
+        props.data.investmentPercentageTarget
+      )
+      return (
+        <InvestmentPercentageChart
+          result={result}
+          data={props.data}
+          investmentPercentageTargetYear={investmentPercentageTargetYear}
+        />
+      )
+    },
+  },
 ]
 
 /**
@@ -78,7 +145,7 @@ export const cardConfigs: CardConfig[] = [
  */
 export const desktopInitialLayout: string[][] = [
   ['basic', 'spending', 'targets'],
-  ['salary', 'investment'],
-  ['results'],
+  ['salary', 'investment', 'results_summary'],
+  ['chart_net_income', 'chart_total_savings', 'chart_income_composition', 'chart_investment_percentage'],
 ]
 
