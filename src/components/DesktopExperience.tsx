@@ -139,7 +139,7 @@ export default function DesktopExperience({ data, setData }: DesktopExperiencePr
     <Box sx={{ p: 4, maxWidth: 1600, mx: 'auto' }}>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" gutterBottom>
-          人生计算器（桌面体验）
+          人生计算器
         </Typography>
         <Typography variant="body1" color="text.secondary">
           拖拽卡片重新排列，所有输入卡片集中呈现，随时调整并实时查看结果。
