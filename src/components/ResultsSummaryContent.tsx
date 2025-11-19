@@ -33,58 +33,82 @@ export default function ResultsSummaryContent({
     }).format(value)
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1, md: 3 }, height: { xs: '100%', md: 'auto' }, overflowY: { xs: 'auto', md: 'visible' }, px: { xs: 1, md: 0 } }}>
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+          gridTemplateColumns: 'repeat(3, 1fr)',
           gap: 1,
         }}
       >
-        <Paper variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
-          <Typography variant="h6" color="primary">
+        <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, textAlign: 'center' }}>
+          <Typography
+            variant="h6"
+            color="primary"
+            sx={{ fontSize: { xs: '0.9rem', sm: '1.1rem', md: '1.25rem' }, fontWeight: 'bold' }}
+          >
             {formatCurrency(result.totalSavings[result.totalSavings.length - 1])}
           </Typography>
-          <Typography variant="caption" color="text.secondary">
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.65rem', md: '0.75rem' }, lineHeight: 1.2, display: 'block' }}
+          >
             {data.years} 年后总储蓄
           </Typography>
         </Paper>
-        <Paper variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
-          <Typography variant="h6" color="success.main">
+        <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, textAlign: 'center' }}>
+          <Typography
+            variant="h6"
+            color="success.main"
+            sx={{ fontSize: { xs: '0.9rem', sm: '1.1rem', md: '1.25rem' }, fontWeight: 'bold' }}
+          >
             {formatCurrency(result.netIncome[result.netIncome.length - 1])}
           </Typography>
-          <Typography variant="caption" color="text.secondary">
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.65rem', md: '0.75rem' }, lineHeight: 1.2, display: 'block' }}
+          >
             第 {data.years} 年净收入
           </Typography>
         </Paper>
-        <Paper variant="outlined" sx={{ p: 2, textAlign: 'center' }}>
-          <Typography variant="h6" color="warning.main">
+        <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, textAlign: 'center' }}>
+          <Typography
+            variant="h6"
+            color="warning.main"
+            sx={{ fontSize: { xs: '0.9rem', sm: '1.1rem', md: '1.25rem' }, fontWeight: 'bold' }}
+          >
             {result.investmentPercentage[result.investmentPercentage.length - 1].toFixed(1)}%
           </Typography>
-          <Typography variant="caption" color="text.secondary">
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.65rem', md: '0.75rem' }, lineHeight: 1.2, display: 'block' }}
+          >
             投资收入占比
           </Typography>
         </Paper>
       </Box>
 
       {(incomeTargetYear || savingsTargetYear || investmentPercentageTargetYear) && (
-        <Box>
-          <Typography variant="subtitle1" gutterBottom>
+        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', py: { xs: 1, md: 0 } }}>
+          <Typography variant="subtitle1" gutterBottom sx={{ display: { xs: 'none', md: 'block' } }}>
             目标达成情况
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
             {incomeTargetYear && (
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' } }}>
                 ✅ 年净收入目标 ({formatCurrency(data.incomeTarget)}) 将在第 {incomeTargetYear} 年达成
               </Typography>
             )}
             {savingsTargetYear && (
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' } }}>
                 ✅ 总储蓄目标 ({formatCurrency(data.savingsTarget)}) 将在第 {savingsTargetYear} 年达成
               </Typography>
             )}
             {investmentPercentageTargetYear && (
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{ fontSize: { xs: '0.75rem', md: '0.875rem' } }}>
                 ✅ 投资收入占比目标 ({data.investmentPercentageTarget}%) 将在第{' '}
                 {investmentPercentageTargetYear} 年达成
               </Typography>
@@ -98,6 +122,9 @@ export default function ResultsSummaryContent({
         itemPrice={VILLA_PRICE}
         affordability={affordability}
         currency={data.currency}
+        sx={{
+          mb: 0,
+        }}
       />
     </Box>
   )

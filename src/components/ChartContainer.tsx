@@ -14,40 +14,49 @@ interface ChartContainerProps {
  */
 export default function ChartContainer({ title, children }: ChartContainerProps) {
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  
-  // 根据设备类型设置高度配置
-  const heightConfig = isMobile 
-    ? { container: 'calc(50vh - 160px)', chart: '100%' }
-    : { container: 'auto', chart: 380 }
-  
-  const content = (
-    <Box 
-      sx={{ 
-        width: '100%', 
-        height: heightConfig.container,
-        overflowX: 'auto',
-        overflowY: 'hidden',
-      }}
-    >
-      <ResponsiveContainer width="100%" height={heightConfig.chart} debounce={200}>
-        {children}
-      </ResponsiveContainer>
-    </Box>
-  )
+  // 与 App.tsx 保持一致，lg 以上为桌面端
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
+  const isMobile = !isDesktop
 
-  // 如果有 title 且不是移动端，用 Paper 包裹
-  if (title) {
+  // 移动端：使用 Flex 布局填充父容器，自带边框和标题
+  if (isMobile) {
     return (
-      <Paper variant="outlined" sx={{ pt: 2, px: 2, pb: 0, mb: 3 }}>
-        <Typography variant="subtitle1" gutterBottom>
-          {title}
-        </Typography>
-        {content}
+      <Paper
+        variant="outlined"
+        sx={{
+          p: 2,
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {title && (
+          <Typography variant="subtitle1" gutterBottom>
+            {title}
+          </Typography>
+        )}
+        <Box sx={{ flex: 1, minHeight: 0, width: '100%' }}>
+          <ResponsiveContainer width="100%" height="100%" debounce={200}>
+            {children}
+          </ResponsiveContainer>
+        </Box>
       </Paper>
     )
   }
 
-  return content
+  // 桌面端：只渲染图表内容，边框和标题由 DesktopCard 提供
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        overflowX: 'auto',
+        overflowY: 'hidden',
+      }}
+    >
+      <ResponsiveContainer width="100%" height={380} debounce={200}>
+        {children}
+      </ResponsiveContainer>
+    </Box>
+  )
 }
 
