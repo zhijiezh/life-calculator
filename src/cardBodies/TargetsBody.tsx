@@ -59,7 +59,7 @@ export default function TargetsBody({ data, setData }: Props) {
         onPointerMove={handlePointerMove}
       >
         <Typography gutterBottom>投资收入占比目标: {data.investmentPercentageTarget}%</Typography>
-        <Box sx={{ px: 1.2}}>
+        <Box sx={{ px: 2.5 }}>
           <Slider
             value={data.investmentPercentageTarget}
             onChange={(_, val) => handlePercentageChange(val as number)}

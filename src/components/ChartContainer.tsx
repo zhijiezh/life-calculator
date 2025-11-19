@@ -36,7 +36,7 @@ export default function ChartContainer({ title, children }: ChartContainerProps)
           </Typography>
         )}
         <Box sx={{ flex: 1, minHeight: 0, width: '100%' }}>
-          <ResponsiveContainer width="100%" height="100%" debounce={200}>
+          <ResponsiveContainer width="100%" height="112%" debounce={200}>
             {children}
           </ResponsiveContainer>
         </Box>
