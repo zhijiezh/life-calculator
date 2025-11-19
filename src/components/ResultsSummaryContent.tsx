@@ -23,7 +23,7 @@ export default function ResultsSummaryContent({
   affordability,
 }: Props) {
   const formatCurrency = (value: number) =>
-    new Intl.NumberFormat('en-US', {
+    new Intl.NumberFormat(data.locale, {
       style: 'currency',
       currency: data.currency,
       minimumFractionDigits: 0,
@@ -120,6 +120,7 @@ export default function ResultsSummaryContent({
         itemPrice={data.dreamItemPrice}
         affordability={affordability}
         currency={data.currency}
+        locale={data.locale}
         sx={{
           mb: 0,
         }}

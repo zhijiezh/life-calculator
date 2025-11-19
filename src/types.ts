@@ -1,5 +1,6 @@
 export interface CalculatorData {
   currency: 'USD' | 'CNY'
+  locale: 'en-US' | 'zh-CN'
   years: number
   initialSavings: number
   salaryCurve: Array<{ year: number; salary: number }> // 工资曲线数据点

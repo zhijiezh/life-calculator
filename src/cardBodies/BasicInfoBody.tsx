@@ -12,6 +12,7 @@ export default function BasicInfoBody({ data, setData }: Props) {
     setData({
       ...data,
       currency: value,
+      locale: value === 'CNY' ? 'zh-CN' : 'en-US',
     })
   }
 
@@ -25,9 +26,7 @@ export default function BasicInfoBody({ data, setData }: Props) {
           onChange={(e) => handleCurrencyChange(e.target.value as 'USD' | 'CNY')}
         >
           <MenuItem value="USD">USD (美元)</MenuItem>
-          <MenuItem value="CNY" disabled>
-            CNY (人民币) - 即将支持
-          </MenuItem>
+          <MenuItem value="CNY">CNY (人民币)</MenuItem>
         </Select>
       </FormControl>
 

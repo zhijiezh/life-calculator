@@ -6,6 +6,7 @@ interface Props {
   itemPrice: number
   affordability: ReturnType<typeof calculateAffordability>
   currency: 'USD' | 'CNY'
+  locale: 'en-US' | 'zh-CN'
   sx?: SxProps<Theme>
 }
 
@@ -14,10 +15,11 @@ export default function AffordabilityCard({
   itemPrice,
   affordability,
   currency,
+  locale,
   sx,
 }: Props) {
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: currency,
       minimumFractionDigits: 0,

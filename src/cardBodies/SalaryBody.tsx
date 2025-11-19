@@ -41,6 +41,7 @@ export default function SalaryBody({ data, setData }: SalaryBodyProps) {
     <SalaryCurveEditor
       years={data.years}
       currency={data.currency}
+      locale={data.locale}
       points={points}
       onChange={handleChange}
     />

@@ -22,7 +22,7 @@ export default function NetIncomeChart({ result, data, incomeTargetYear }: Props
   const chartData = useChartData(result)
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat(data.locale, {
       style: 'currency',
       currency: data.currency,
       minimumFractionDigits: 0,
@@ -31,7 +31,7 @@ export default function NetIncomeChart({ result, data, incomeTargetYear }: Props
   }
 
   const formatCompactNumber = (number: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat(data.locale, {
       notation: 'compact',
       compactDisplay: 'short',
       maximumFractionDigits: 1,

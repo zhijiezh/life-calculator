@@ -16,11 +16,12 @@ import NumberField from './NumberField'
 interface Props {
   years: number
   currency: 'USD' | 'CNY'
+  locale: 'en-US' | 'zh-CN'
   points: Array<{ year: number; salary: number }>
   onChange: (points: Array<{ year: number; salary: number }>) => void
 }
 
-export default function SalaryCurveEditor({ years, currency, points, onChange }: Props) {
+export default function SalaryCurveEditor({ years, currency, locale, points, onChange }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [isMobile, setIsMobile] = useState(false)
@@ -144,7 +145,7 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
   }
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: currency,
       minimumFractionDigits: 0,
@@ -245,7 +246,7 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
                 }}
                 domain={[0, maxSalary]}
                 tickFormatter={(value) => {
-                  return new Intl.NumberFormat('en-US', {
+                  return new Intl.NumberFormat(locale, {
                     notation: 'compact',
                     compactDisplay: 'short',
                     maximumFractionDigits: 1,

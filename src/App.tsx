@@ -18,6 +18,7 @@ const theme = createTheme({
 
 const createDefaultData = (): CalculatorData => ({
   currency: 'USD',
+  locale: 'en-US',
   years: 15,
   initialSavings: 80000,
   salaryCurve: [],
