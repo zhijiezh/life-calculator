@@ -223,18 +223,19 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
             <LineChart 
               data={chartData} 
               margin={{ 
-                left: isMobile ? 35 : 45, 
-                right: isMobile ? 10 : 20, 
-                top: isMobile ? 35 : 45, 
-                bottom: isMobile ? 50 : 40 
+                left: 10, 
+                right: 30, 
+                top: 50, 
+                bottom: 10 
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
                 dataKey="year"
-                label={{ value: '年份', position: 'insideBottom', offset: isMobile ? -10 : -5 }}
+                label={{ value: '年份', position: 'insideBottom', offset: -5 }}
                 domain={[1, years]}
                 tick={{ fontSize: isMobile ? 12 : 14 }}
+                height={40}
               />
               <YAxis
                 label={{ 
@@ -242,18 +243,18 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
                   angle: 0, 
                   position: 'top',
                   style: { fontSize: isMobile ? 12 : 14, textAnchor: 'middle' },
-                  offset: 5
+                  offset: 20
                 }}
                 domain={[0, maxSalary]}
                 tickFormatter={(value) => {
-                  // 简化显示，大数字用K表示
-                  if (value >= 1000) {
-                    return `$${(value / 1000).toFixed(0)}K`
-                  }
-                  return formatCurrency(value)
+                  return new Intl.NumberFormat('en-US', {
+                    notation: 'compact',
+                    compactDisplay: 'short',
+                    maximumFractionDigits: 1,
+                  }).format(value)
                 }}
                 tick={{ fontSize: isMobile ? 10 : 12 }}
-                width={isMobile ? 35 : 45}
+                width={50}
               />
               <Tooltip
                 formatter={(value: number) => formatCurrency(value)}

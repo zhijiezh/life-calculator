@@ -38,6 +38,14 @@ export default function ResultsCharts({
     }).format(value)
   }
 
+  const formatCompactNumber = (number: number) => {
+    return new Intl.NumberFormat('en-US', {
+      notation: 'compact',
+      compactDisplay: 'short',
+      maximumFractionDigits: 1,
+    }).format(number)
+  }
+
   const chartData = useMemo(
     () =>
       result.years.map((year, index) => ({
@@ -53,6 +61,10 @@ export default function ResultsCharts({
     [result]
   )
 
+  const commonChartProps = {
+    margin: { top: 10, right: 30, left: 0, bottom: 30 },
+  }
+
   return (
     <Box>
       <Typography variant="h6" gutterBottom sx={{ mb: 3 }}>
@@ -62,12 +74,19 @@ export default function ResultsCharts({
       {/* 净收入图 */}
       <ChartContainer title="年净收入趋势">
         <ResponsiveContainer width="100%" height={380} debounce={200}>
-          <LineChart data={chartData}>
+          <LineChart data={chartData} {...commonChartProps}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
-            <YAxis tickFormatter={(value) => formatCurrency(value)} />
+            <XAxis 
+              dataKey="year" 
+              label={{ value: '年份', position: 'insideBottom' }} 
+              height={40}
+            />
+            <YAxis 
+              tickFormatter={(value) => formatCompactNumber(value)} 
+              width={50}
+            />
             <Tooltip formatter={(value: number) => formatCurrency(value)} />
-            <Legend />
+            <Legend wrapperStyle={{ paddingTop: '10px' }} />
             <Line
               type="monotone"
               dataKey="netIncome"
@@ -98,12 +117,19 @@ export default function ResultsCharts({
       {/* 总储蓄对比图（有投资 vs 无投资） */}
       <ChartContainer title="总储蓄对比：有投资 vs 无投资">
         <ResponsiveContainer width="100%" height={380} debounce={200}>
-          <LineChart data={chartData}>
+          <LineChart data={chartData} {...commonChartProps}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
-            <YAxis tickFormatter={(value) => formatCurrency(value)} />
+            <XAxis 
+              dataKey="year" 
+              label={{ value: '年份', position: 'insideBottom'}} 
+              height={40}
+            />
+            <YAxis 
+              tickFormatter={(value) => formatCompactNumber(value)} 
+              width={50}
+            />
             <Tooltip formatter={(value: number) => formatCurrency(value)} />
-            <Legend />
+            <Legend wrapperStyle={{ paddingTop: '10px' }} />
             <Line
               type="monotone"
               dataKey="totalSavings"
@@ -142,12 +168,19 @@ export default function ResultsCharts({
       {/* 收入构成图 */}
       <ChartContainer title="收入构成">
         <ResponsiveContainer width="100%" height={380} debounce={200}>
-          <LineChart data={chartData}>
+          <LineChart data={chartData} {...commonChartProps}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
-            <YAxis tickFormatter={(value) => formatCurrency(value)} />
+            <XAxis 
+              dataKey="year" 
+              label={{ value: '年份', position: 'insideBottom' }} 
+              height={40}
+            />
+            <YAxis 
+              tickFormatter={(value) => formatCompactNumber(value)} 
+              width={50}
+            />
             <Tooltip formatter={(value: number) => formatCurrency(value)} />
-            <Legend />
+            <Legend wrapperStyle={{ paddingTop: '10px' }} />
             <Line
               type="monotone"
               dataKey="salaryIncome"
@@ -176,12 +209,19 @@ export default function ResultsCharts({
       {/* 投资收入占比图 */}
       <ChartContainer title="投资收入占比趋势">
         <ResponsiveContainer width="100%" height={380} debounce={200}>
-          <LineChart data={chartData}>
+          <LineChart data={chartData} {...commonChartProps}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" label={{ value: '年份', position: 'insideBottom', offset: -5 }} />
-            <YAxis tickFormatter={(value) => `${value}%`} />
+            <XAxis 
+              dataKey="year" 
+              label={{ value: '年份', position: 'insideBottom' }} 
+              height={40}
+            />
+            <YAxis 
+              tickFormatter={(value) => `${value}%`} 
+              width={50}
+            />
             <Tooltip formatter={(value: number) => `${value.toFixed(1)}%`} />
-            <Legend />
+            <Legend wrapperStyle={{ paddingTop: '10px' }} />
             <Line
               type="monotone"
               dataKey="investmentPercentage"

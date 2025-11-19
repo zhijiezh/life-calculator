@@ -26,7 +26,7 @@ export default function ChartContainer({ title, children }: ChartContainerProps)
   // 如果有 title，用 Paper 包裹
   if (title) {
     return (
-      <Paper variant="outlined" sx={{ p: 2, mb: 3 }}>
+      <Paper variant="outlined" sx={{ pt: 2, px: 2, pb: 0, mb: 3 }}>
         <Typography variant="subtitle1" gutterBottom>
           {title}
         </Typography>
