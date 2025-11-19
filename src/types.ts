@@ -9,6 +9,8 @@ export interface CalculatorData {
   incomeTarget: number
   savingsTarget: number
   investmentPercentageTarget: number
+  dreamItemName: string
+  dreamItemPrice: number
 }
 
 export interface CalculationResult {

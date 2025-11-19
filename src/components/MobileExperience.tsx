@@ -3,6 +3,7 @@ import { Box, Paper, Typography, IconButton } from '@mui/material'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CalculatorData } from '../types'
 import { cardConfigs } from '../config/cardConfig'
+import WelcomeBody from '../cardBodies/WelcomeBody'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 
@@ -17,25 +18,35 @@ function SimpleSwiper({
   items,
   renderItem,
   height = '100%',
+  locked = false,
+  onIndexChange,
 }: {
   items: any[]
   renderItem: (item: any) => React.ReactNode
   height?: string | number
+  locked?: boolean
+  onIndexChange?: (index: number) => void
 }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection] = useState(0)
 
   const handleNext = () => {
+    if (locked) return
     if (currentIndex < items.length - 1) {
       setDirection(1)
-      setCurrentIndex(currentIndex + 1)
+      const newIndex = currentIndex + 1
+      setCurrentIndex(newIndex)
+      onIndexChange?.(newIndex)
     }
   }
 
   const handlePrev = () => {
+    if (locked) return
     if (currentIndex > 0) {
       setDirection(-1)
-      setCurrentIndex(currentIndex - 1)
+      const newIndex = currentIndex - 1
+      setCurrentIndex(newIndex)
+      onIndexChange?.(newIndex)
     }
   }
 
@@ -68,11 +79,12 @@ function SimpleSwiper({
             x: { type: 'spring', stiffness: 300, damping: 30 },
             opacity: { duration: 0.2 },
           }}
-          drag="x"
+          drag={locked ? false : "x"}
           dragDirectionLock
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={1}
           onDragEnd={(_, { offset, velocity }) => {
+            if (locked) return
             const swipe = offset.x
             if (swipe < -50 || velocity.x < -500) {
               handleNext()
@@ -162,9 +174,34 @@ function SimpleSwiper({
 }
 
 export default function MobileExperience({ data, setData }: MobileExperienceProps) {
+  // 跟踪下半屏访问过的最大进度（不可逆）
+  const [maxInputProgress, setMaxInputProgress] = useState(0)
+  const [isUnlocked, setIsUnlocked] = useState(false)
+
   // 1. 筛选卡片
   const chartCards = cardConfigs.filter((c) => c.category === 'chart' || c.category === 'summary')
   const inputCards = cardConfigs.filter((c) => c.category === 'input')
+
+  // 2. 计算进度（基于访问过的最大页数，不可逆）
+  const progress = inputCards.length > 0 ? ((maxInputProgress + 1) / inputCards.length) * 100 : 0
+  
+  // 3. 一旦达到100%，永久解锁
+  if (progress >= 100 && !isUnlocked) {
+    setIsUnlocked(true)
+  }
+
+  // 4. 处理下半屏index变化
+  const handleInputIndexChange = (index: number) => {
+    if (index > maxInputProgress) {
+      setMaxInputProgress(index)
+    }
+  }
+
+  // 5. 准备上半屏的items（包含Welcome页）
+  const topItems = [
+    { type: 'welcome', progress },
+    ...chartCards.map((config) => ({ type: 'chart', config })),
+  ]
 
   return (
     <Box
@@ -179,24 +216,35 @@ export default function MobileExperience({ data, setData }: MobileExperienceProp
         bgcolor: 'background.default',
       }}
     >
-      {/* Top Section: Charts (60%) */}
+      {/* Top Section: Welcome + Charts */}
       <Box sx={{ height: '50%', borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
         <SimpleSwiper
-          items={chartCards}
-          renderItem={(config) => (
-            <Box sx={{ width: '100%', height: '100%', p: 1.5, overflow: 'hidden' }}>
-              <Box sx={{ flex: 1, height: 'calc(100% - 24px)', overflow: 'hidden' }}>
-                {config.component({ data, setData })}
+          items={topItems}
+          locked={!isUnlocked}
+          renderItem={(item) => {
+            if (item.type === 'welcome') {
+              return (
+                <Box sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <WelcomeBody progress={item.progress} />
+                </Box>
+              )
+            }
+            return (
+              <Box sx={{ width: '100%', height: '100%', p: 1.5, overflow: 'hidden' }}>
+                <Box sx={{ flex: 1, height: 'calc(100% - 24px)', overflow: 'hidden' }}>
+                  {item.config.component({ data, setData })}
+                </Box>
               </Box>
-            </Box>
-          )}
+            )
+          }}
         />
       </Box>
 
-      {/* Bottom Section: Inputs (40%) */}
+      {/* Bottom Section: Inputs */}
       <Box sx={{ height: '50%', bgcolor: 'background.default' }}>
         <SimpleSwiper
           items={inputCards}
+          onIndexChange={handleInputIndexChange}
           renderItem={(config) => (
             <Box sx={{ width: '100%', height: '100%', p: 1.5, overflowY: 'auto' }}>
               <Paper

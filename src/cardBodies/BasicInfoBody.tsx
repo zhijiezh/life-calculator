@@ -16,7 +16,7 @@ export default function BasicInfoBody({ data, setData }: Props) {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1, pb: 3 }}>
       <FormControl fullWidth>
         <InputLabel>货币单位</InputLabel>
         <Select

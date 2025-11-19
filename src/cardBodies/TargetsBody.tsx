@@ -1,4 +1,4 @@
-import { Box, Slider, Typography } from '@mui/material'
+import { Box, Slider, Typography, TextField } from '@mui/material'
 import NumberField from '../components/NumberField'
 import { CalculatorData } from '../types'
 
@@ -25,40 +25,66 @@ export default function TargetsBody({ data, setData }: Props) {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 , pt: 1}}>
-            <NumberField
-              label="年净收入目标"
-              defaultValue={data.incomeTarget}
-              onValueChange={(value: number | null) => {
-                if (value !== null) {
-                  setData({ ...data, incomeTarget: value })
-                }
-              }}
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1, pb: 3 }}>
+      {/* 购买力目标设定 - 统一样式 */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <TextField
+            label="目标商品"
+            value={data.dreamItemName}
+            onChange={(e) => setData({ ...data, dreamItemName: e.target.value })}
+            fullWidth
+          />
+          <NumberField
+            label="价格"
+            defaultValue={data.dreamItemPrice}
+            onValueChange={(value: number | null) => {
+              if (value !== null) {
+                setData({ ...data, dreamItemPrice: value })
+              }
+            }}
+            min={0}
+            step={10000}
+            fullWidth
+          />
+        </Box>
+        <Typography variant="caption" color="text.secondary" sx={{ px: 1.75 }}>
+          设定想要购买的商品及其价格 ({data.currency})
+        </Typography>
+      </Box>
+
+      <NumberField
+        label="年净收入目标"
+        defaultValue={data.incomeTarget}
+        onValueChange={(value: number | null) => {
+          if (value !== null) {
+            setData({ ...data, incomeTarget: value })
+          }
+        }}
         min={0}
         step={1000}
         helperText={`希望达到的年净收入目标 (${data.currency})`}
         fullWidth
       />
 
-            <NumberField
-              label="总储蓄目标"
-              defaultValue={data.savingsTarget}
-              onValueChange={(value: number | null) => {
-                if (value !== null) {
-                  setData({ ...data, savingsTarget: value })
-                }
-              }}
+      <NumberField
+        label="总储蓄目标"
+        defaultValue={data.savingsTarget}
+        onValueChange={(value: number | null) => {
+          if (value !== null) {
+            setData({ ...data, savingsTarget: value })
+          }
+        }}
         min={0}
         step={10000}
         helperText={`希望达到的总储蓄目标 (${data.currency})`}
         fullWidth
       />
 
-      <Box
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-      >
-        <Typography gutterBottom>投资收入占比目标: {data.investmentPercentageTarget}%</Typography>
+      <Box onPointerDown={handlePointerDown} onPointerMove={handlePointerMove}>
+        <Typography gutterBottom>
+          投资收入占比目标: {data.investmentPercentageTarget}%
+        </Typography>
         <Box sx={{ px: 2.5 }}>
           <Slider
             value={data.investmentPercentageTarget}

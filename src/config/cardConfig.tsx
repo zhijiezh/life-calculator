@@ -69,7 +69,7 @@ export const cardConfigs: CardConfig[] = [
   {
     id: 'targets',
     title: '目标设置',
-    description: '定义收入、储蓄与投资占比目标',
+    description: '设定购买力目标、收入、储蓄与投资占比目标',
     category: 'input',
     component: (props) => <TargetsBody {...props} />,
   },

@@ -197,7 +197,7 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
   }
 
   return (
-    <Box>
+    <Box sx={{ pb: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
         <Typography variant="body2" color="text.secondary" sx={{ flex: 1, minWidth: 200 }}>
           点击下方输入框编辑，点击 + 添加新点

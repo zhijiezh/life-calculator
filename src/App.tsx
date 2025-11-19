@@ -27,6 +27,8 @@ const createDefaultData = (): CalculatorData => ({
   incomeTarget: 1095000,
   savingsTarget: 3000000,
   investmentPercentageTarget: 90,
+  dreamItemName: '梦想豪宅',
+  dreamItemPrice: 3000000,
 })
 
 function App() {

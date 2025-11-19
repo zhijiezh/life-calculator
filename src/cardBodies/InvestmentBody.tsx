@@ -9,7 +9,7 @@ interface Props {
 
 export default function InvestmentBody({ data, setData }: Props) {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1, pb: 3 }}>
             <NumberField
               label="年投资回报率"
               defaultValue={data.investmentReturnRate * 100}

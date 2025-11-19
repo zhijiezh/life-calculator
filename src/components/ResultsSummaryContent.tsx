@@ -14,8 +14,6 @@ interface Props {
   }
 }
 
-const VILLA_PRICE = 3000000
-
 export default function ResultsSummaryContent({
   result,
   data,
@@ -118,8 +116,8 @@ export default function ResultsSummaryContent({
       )}
 
       <AffordabilityCard
-        itemName="300万美元别墅"
-        itemPrice={VILLA_PRICE}
+        itemName={data.dreamItemName}
+        itemPrice={data.dreamItemPrice}
         affordability={affordability}
         currency={data.currency}
         sx={{
