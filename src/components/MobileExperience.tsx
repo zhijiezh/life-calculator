@@ -69,6 +69,7 @@ function SimpleSwiper({
             opacity: { duration: 0.2 },
           }}
           drag="x"
+          dragDirectionLock
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={1}
           onDragEnd={(_, { offset, velocity }) => {
@@ -85,6 +86,7 @@ function SimpleSwiper({
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
+            touchAction: 'pan-y',
           }}
         >
           {renderItem(items[currentIndex])}
