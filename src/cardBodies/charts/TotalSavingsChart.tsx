@@ -6,7 +6,6 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
   ReferenceLine,
 } from 'recharts'
 import { CalculatorData, CalculationResult } from '../../types'
@@ -45,7 +44,6 @@ export default function TotalSavingsChart({ result, data, savingsTargetYear }: P
 
   return (
     <ChartContainer title="总储蓄对比：有投资 vs 无投资">
-      <ResponsiveContainer width="100%" height={380} debounce={200}>
         <LineChart data={chartData} {...commonChartProps}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
@@ -91,7 +89,6 @@ export default function TotalSavingsChart({ result, data, savingsTargetYear }: P
             </>
           )}
         </LineChart>
-      </ResponsiveContainer>
     </ChartContainer>
   )
 }

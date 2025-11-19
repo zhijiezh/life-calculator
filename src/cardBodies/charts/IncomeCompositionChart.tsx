@@ -6,7 +6,6 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
 } from 'recharts'
 import { CalculatorData, CalculationResult } from '../../types'
 import { useChartData } from '../../hooks/useChartData'
@@ -43,7 +42,6 @@ export default function IncomeCompositionChart({ result, data }: Props) {
 
   return (
     <ChartContainer title="收入构成">
-      <ResponsiveContainer width="100%" height={380} debounce={200}>
         <LineChart data={chartData} {...commonChartProps}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
@@ -79,7 +77,6 @@ export default function IncomeCompositionChart({ result, data }: Props) {
             name="支出"
           />
         </LineChart>
-      </ResponsiveContainer>
     </ChartContainer>
   )
 }

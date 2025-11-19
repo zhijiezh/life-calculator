@@ -16,7 +16,7 @@ export default function BasicInfoBody({ data, setData }: Props) {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
       <FormControl fullWidth>
         <InputLabel>货币单位</InputLabel>
         <Select
@@ -44,20 +44,6 @@ export default function BasicInfoBody({ data, setData }: Props) {
         max={50}
         step={1}
         helperText="预测未来多少年的财务状况"
-        fullWidth
-      />
-
-            <NumberField
-              label="初始存款"
-              defaultValue={data.initialSavings}
-              onValueChange={(value: number | null) => {
-                if (value !== null) {
-                  setData({ ...data, initialSavings: value })
-                }
-              }}
-        min={0}
-        step={1000}
-        helperText={`当前已有的存款金额 (${data.currency})`}
         fullWidth
       />
     </Box>

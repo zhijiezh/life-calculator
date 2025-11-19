@@ -5,7 +5,6 @@ import SalaryBody from '../cardBodies/SalaryBody'
 import SpendingBody from '../cardBodies/SpendingBody'
 import InvestmentBody from '../cardBodies/InvestmentBody'
 import TargetsBody from '../cardBodies/TargetsBody'
-import ResultsBody from '../cardBodies/ResultsBody'
 import ResultsSummaryBody from '../cardBodies/ResultsSummaryBody'
 import NetIncomeChart from '../cardBodies/charts/NetIncomeChart'
 import TotalSavingsChart from '../cardBodies/charts/TotalSavingsChart'
@@ -18,7 +17,7 @@ export interface CardConfig {
   title: string
   description: string
   mobileTitle?: string // 如果 mobile 需要不同的标题
-  hiddenOnMobile?: boolean // 如果为 true，则在移动端不显示
+  category: 'input' | 'chart' | 'summary'
   component: (props: CardBodyProps) => ReactNode
 }
 
@@ -34,6 +33,7 @@ export interface CardBodyProps {
  * - title: 桌面端和移动端的标题
  * - description: 桌面端的副标题
  * - mobileTitle: (可选) 移动端专用标题，不提供则使用 title
+ * - category: 卡片类型，用于移动端分屏布局
  * - component: 卡片内容组件
  */
 export const cardConfigs: CardConfig[] = [
@@ -41,6 +41,7 @@ export const cardConfigs: CardConfig[] = [
     id: 'basic',
     title: '基础信息',
     description: '设置预测范围与初始资产',
+    category: 'input',
     component: (props) => <BasicInfoBody {...props} />,
   },
   {
@@ -48,45 +49,42 @@ export const cardConfigs: CardConfig[] = [
     title: '工资收入曲线',
     description: '拖拽节点或输入数值，描绘未来收入变化',
     mobileTitle: '工资收入',
+    category: 'input',
     component: (props) => <SalaryBody {...props} />,
   },
   {
     id: 'spending',
     title: '支出设置',
     description: '每年的基础支出和通胀假设',
+    category: 'input',
     component: (props) => <SpendingBody {...props} />,
   },
   {
     id: 'investment',
     title: '投资设置',
     description: '设定预期的年投资回报率',
+    category: 'input',
     component: (props) => <InvestmentBody {...props} />,
   },
   {
     id: 'targets',
     title: '目标设置',
     description: '定义收入、储蓄与投资占比目标',
+    category: 'input',
     component: (props) => <TargetsBody {...props} />,
-  },
-  {
-    id: 'results',
-    title: '结果预览',
-    description: '实时查看预测与图表',
-    mobileTitle: '查看结果',
-    component: (props) => <ResultsBody {...props} />,
   },
   {
     id: 'results_summary',
     title: '结果概览',
     description: '核心指标与目标达成情况',
-    hiddenOnMobile: true,
+    category: 'summary',
     component: (props) => <ResultsSummaryBody {...props} />,
   },
   {
     id: 'chart_net_income',
     title: '年净收入趋势',
     description: '每年净收入的变化趋势',
-    hiddenOnMobile: true,
+    category: 'chart',
     component: (props) => {
       const result = lifeCalculator(props.data)
       const incomeTargetYear = findFirstYear(result, 'netIncome', props.data.incomeTarget)
@@ -97,7 +95,7 @@ export const cardConfigs: CardConfig[] = [
     id: 'chart_total_savings',
     title: '总储蓄对比',
     description: '有投资与无投资的总储蓄对比',
-    hiddenOnMobile: true,
+    category: 'chart',
     component: (props) => {
       const result = lifeCalculator(props.data)
       const savingsTargetYear = findFirstYear(result, 'totalSavings', props.data.savingsTarget)
@@ -108,7 +106,7 @@ export const cardConfigs: CardConfig[] = [
     id: 'chart_income_composition',
     title: '收入构成',
     description: '工资收入、投资收入与支出的构成',
-    hiddenOnMobile: true,
+    category: 'chart',
     component: (props) => {
       const result = lifeCalculator(props.data)
       return <IncomeCompositionChart result={result} data={props.data} />
@@ -118,7 +116,7 @@ export const cardConfigs: CardConfig[] = [
     id: 'chart_investment_percentage',
     title: '投资收入占比',
     description: '投资收入占总收入的比例趋势',
-    hiddenOnMobile: true,
+    category: 'chart',
     component: (props) => {
       const result = lifeCalculator(props.data)
       const investmentPercentageTargetYear = findFirstYear(

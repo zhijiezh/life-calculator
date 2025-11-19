@@ -8,11 +8,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts'
-import { Box, Typography, IconButton, Paper } from '@mui/material'
+import { Box, Typography, IconButton } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
 import NumberField from './NumberField'
-import ChartContainer from './ChartContainer'
 
 interface Props {
   years: number
@@ -216,16 +215,15 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
         </IconButton>
       </Box>
 
-      <Paper variant="outlined" sx={{ p: { xs: 1, sm: 2 } }}>
-        <ChartContainer>
-          <div ref={containerRef} style={{ position: 'relative' }}>
-            <ResponsiveContainer width="100%" height={500} debounce={200}>
+      <Box sx={{ width: '100%', height: isMobile ? 250 : 350, mb: 2 }}>
+        <div ref={containerRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <ResponsiveContainer width="100%" height="100%" debounce={200}>
             <LineChart 
               data={chartData} 
               margin={{ 
                 left: 10, 
                 right: 30, 
-                top: 50, 
+                top: 20, 
                 bottom: 10 
               }}
             >
@@ -243,7 +241,7 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
                   angle: 0, 
                   position: 'top',
                   style: { fontSize: isMobile ? 12 : 14, textAnchor: 'middle' },
-                  offset: 20
+                  offset: 10
                 }}
                 domain={[0, maxSalary]}
                 tickFormatter={(value) => {
@@ -279,80 +277,76 @@ export default function SalaryCurveEditor({ years, currency, points, onChange }:
                 }}
               />
             </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </ChartContainer>
+          </ResponsiveContainer>
+        </div>
+      </Box>
 
-        {/* 显示数据点编辑 */}
-          <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
-            {points
-              .sort((a, b) => a.year - b.year)
-              .map((point) => {
-                const index = points.findIndex((p) => p === point)
-                const isEditing = editingIndex === index
-                return (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1,
-                      p: 1,
-                      bgcolor: isEditing ? 'action.selected' : 'action.hover',
-                      borderRadius: 1,
-                      flexWrap: 'wrap',
+      {/* 显示数据点编辑 */}
+      <Box sx={{ mt: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
+        {points
+          .sort((a, b) => a.year - b.year)
+          .map((point) => {
+            const index = points.findIndex((p) => p === point)
+            const isEditing = editingIndex === index
+            return (
+              <Box
+                key={index}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  p: 1,
+                  bgcolor: isEditing ? 'action.selected' : 'action.hover',
+                  borderRadius: 1,
+                  flexWrap: 'wrap',
+                }}
+              >
+                <Box sx={{ width: 80 }} onClick={() => setEditingIndex(index)}>
+                  <NumberField
+                    size="small"
+                    label="年份"
+                    defaultValue={point.year}
+                    onValueChange={(value: number | null) => {
+                      if (value !== null) {
+                        handlePointChange(index, 'year', value)
+                      }
+                    }}
+                    min={1}
+                    max={years}
+                    step={1}
+                    fullWidth
+                  />
+                </Box>
+                <Box sx={{ flex: 1, minWidth: 120 }} onClick={() => setEditingIndex(index)}>
+                  <NumberField
+                    size="small"
+                    label="工资"
+                    defaultValue={point.salary}
+                    onValueChange={(value: number | null) => {
+                      if (value !== null) {
+                        handlePointChange(index, 'salary', value)
+                      }
+                    }}
+                    min={0}
+                    step={1000}
+                    fullWidth
+                  />
+                </Box>
+                {points.length > 1 && (
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      handleDeletePoint(index)
+                      if (editingIndex === index) setEditingIndex(null)
                     }}
                   >
-                    <Box sx={{ width: 100 }} onClick={() => setEditingIndex(index)}>
-                        <NumberField
-                          size="small"
-                          label="年份"
-                          defaultValue={point.year}
-                          onValueChange={(value: number | null) => {
-                            if (value !== null) {
-                              handlePointChange(index, 'year', value)
-                            }
-                          }}
-                        min={1}
-                        max={years}
-                        step={1}
-                        fullWidth
-                      />
-                    </Box>
-                    <Box sx={{ flex: 1, minWidth: 150 }} onClick={() => setEditingIndex(index)}>
-                        <NumberField
-                          size="small"
-                          label="工资"
-                          defaultValue={point.salary}
-                          onValueChange={(value: number | null) => {
-                            if (value !== null) {
-                              handlePointChange(index, 'salary', value)
-                            }
-                          }}
-                        min={0}
-                        step={1000}
-                        fullWidth
-                      />
-                    </Box>
-                    <Typography variant="caption" sx={{ minWidth: 100 }}>
-                      {formatCurrency(point.salary)}
-                    </Typography>
-                    {points.length > 1 && (
-                      <IconButton
-                        size="small"
-                        onClick={() => {
-                          handleDeletePoint(index)
-                          if (editingIndex === index) setEditingIndex(null)
-                        }}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    )}
-                  </Box>
-                )
-              })}
-          </Box>
-      </Paper>
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                )}
+              </Box>
+            )
+          })}
+      </Box>
     </Box>
   )
 }

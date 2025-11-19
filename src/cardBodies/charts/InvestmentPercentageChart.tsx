@@ -6,7 +6,6 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
   ReferenceLine,
 } from 'recharts'
 import { CalculatorData, CalculationResult } from '../../types'
@@ -32,7 +31,6 @@ export default function InvestmentPercentageChart({
 
   return (
     <ChartContainer title="投资收入占比趋势">
-      <ResponsiveContainer width="100%" height={380} debounce={200}>
         <LineChart data={chartData} {...commonChartProps}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
@@ -67,7 +65,6 @@ export default function InvestmentPercentageChart({
             </>
           )}
         </LineChart>
-      </ResponsiveContainer>
     </ChartContainer>
   )
 }

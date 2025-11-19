@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { HashRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence, PanInfo } from 'framer-motion'
-import { Button, Container, Box } from '@mui/material'
+import { Box, Paper, Typography, IconButton } from '@mui/material'
+import { motion, AnimatePresence } from 'framer-motion'
 import { CalculatorData } from '../types'
-import MobileCard from './cardWrappers/MobileCard'
-import MobileProgressHeader from './MobileProgressHeader'
 import { cardConfigs } from '../config/cardConfig'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 
 interface MobileExperienceProps {
   data: CalculatorData
@@ -13,97 +12,36 @@ interface MobileExperienceProps {
   onReset: () => void
 }
 
-// 从 cardConfigs 生成移动端步骤配置
-const steps = cardConfigs
-  .filter((config) => !config.hiddenOnMobile)
-  .map((config) => ({
-    path: `/step${cardConfigs.indexOf(config) + 1}`,
-    title: config.mobileTitle || config.title,
-    config,
-  }))
-
-function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [direction, setDirection] = useState(1)
-
-  const currentStepIndex = steps.findIndex((s) => s.path === location.pathname)
-  const currentStep = currentStepIndex >= 0 ? currentStepIndex : 0
-  const { title, config } = steps[currentStep]
-
-  const isLastStep = currentStep === steps.length - 1
-  const isFirstStep = currentStep === 0
+// 简单的 Swiper 组件
+function SimpleSwiper({
+  items,
+  renderItem,
+  height = '100%',
+}: {
+  items: any[]
+  renderItem: (item: any) => React.ReactNode
+  height?: string | number
+}) {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [direction, setDirection] = useState(0)
 
   const handleNext = () => {
-    if (currentStep < steps.length - 1) {
-      setDirection(1) // 向左滑
-      navigate(steps[currentStep + 1].path)
+    if (currentIndex < items.length - 1) {
+      setDirection(1)
+      setCurrentIndex(currentIndex + 1)
     }
   }
 
-  const handleBack = () => {
-    if (currentStep > 0) {
-      setDirection(-1) // 向右滑
-      navigate(steps[currentStep - 1].path)
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setDirection(-1)
+      setCurrentIndex(currentIndex - 1)
     }
   }
 
-  const handleResetAndNavigate = () => {
-    onReset()
-    navigate('/step1', { replace: true })
-  }
-
-  const handleDragEnd = (_: any, info: PanInfo) => {
-    const swipeThreshold = 50 // 降低阈值，更容易触发
-    const swipeVelocity = 200 // 降低速度要求
-
-    if (Math.abs(info.offset.x) > swipeThreshold || Math.abs(info.velocity.x) > swipeVelocity) {
-      if (info.offset.x < 0) {
-        // 向左拖 = 下一步
-        if (!isLastStep) {
-          setDirection(1)
-          handleNext()
-        }
-      } else {
-        // 向右拖 = 上一步
-        if (!isFirstStep) {
-          setDirection(-1)
-          handleBack()
-        }
-      }
-    }
-  }
-
-  const header = (
-    <MobileProgressHeader currentStep={currentStep + 1} totalSteps={steps.length} title={title} />
-  )
-
-  const footer = isLastStep ? (
-    <>
-      <Button onClick={handleBack} size="large" sx={{ minHeight: 48, flex: 1 }}>
-        返回上一步
-      </Button>
-      <Button variant="outlined" onClick={handleResetAndNavigate} size="large" sx={{ minHeight: 48, flex: 1 }}>
-        重新开始
-      </Button>
-    </>
-  ) : (
-    <>
-      {!isFirstStep && (
-        <Button onClick={handleBack} size="large" sx={{ minHeight: 48, flex: 1 }}>
-          上一步
-        </Button>
-      )}
-      <Button variant="contained" onClick={handleNext} size="large" sx={{ minHeight: 48, flex: 1 }}>
-        {isLastStep ? '查看结果' : '下一步'}
-      </Button>
-    </>
-  )
-
-  // 动画变体：根据导航方向决定滑动方向
   const variants = {
     enter: (dir: number) => ({
-      x: dir > 0 ? 300 : -300, // 前进从右边进，后退从左边进
+      x: dir > 0 ? '100%' : '-100%',
       opacity: 0,
     }),
     center: {
@@ -111,10 +49,122 @@ function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
       opacity: 1,
     },
     exit: (dir: number) => ({
-      x: dir > 0 ? -300 : 300, // 前进向左出，后退向右出
+      x: dir > 0 ? '-100%' : '100%',
       opacity: 0,
     }),
   }
+
+  return (
+    <Box sx={{ position: 'relative', width: '100%', height, overflow: 'hidden' }}>
+      <AnimatePresence initial={false} custom={direction}>
+        <motion.div
+          key={currentIndex}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: 'spring', stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 },
+          }}
+          drag="x"
+          dragDirectionLock
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={1}
+          onDragEnd={(_, { offset, velocity }) => {
+            const swipe = offset.x
+            if (swipe < -50 || velocity.x < -500) {
+              handleNext()
+            } else if (swipe > 50 || velocity.x > 500) {
+              handlePrev()
+            }
+          }}
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            touchAction: 'pan-y',
+          }}
+        >
+          {renderItem(items[currentIndex])}
+        </motion.div>
+      </AnimatePresence>
+
+      {/* 导航指示器 */}
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: 8,
+          left: 0,
+          right: 0,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 1,
+          zIndex: 10,
+          pointerEvents: 'none',
+        }}
+      >
+        {items.map((_, idx) => (
+          <Box
+            key={idx}
+            sx={{
+              width: 6,
+              height: 6,
+              borderRadius: '50%',
+              bgcolor: idx === currentIndex ? 'primary.main' : 'action.disabled',
+              transition: 'background-color 0.3s',
+            }}
+          />
+        ))}
+      </Box>
+
+      {/* 左右箭头 (可选，辅助点击) */}
+      {currentIndex > 0 && (
+        <IconButton
+          onClick={handlePrev}
+          sx={{
+            position: 'absolute',
+            left: 4,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            zIndex: 10,
+            bgcolor: 'rgba(255,255,255,0.5)',
+            '&:hover': { bgcolor: 'rgba(255,255,255,0.8)' },
+          }}
+          size="small"
+        >
+          <ChevronLeftIcon />
+        </IconButton>
+      )}
+      {currentIndex < items.length - 1 && (
+        <IconButton
+          onClick={handleNext}
+          sx={{
+            position: 'absolute',
+            right: 4,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            zIndex: 10,
+            bgcolor: 'rgba(255,255,255,0.5)',
+            '&:hover': { bgcolor: 'rgba(255,255,255,0.8)' },
+          }}
+          size="small"
+        >
+          <ChevronRightIcon />
+        </IconButton>
+      )}
+    </Box>
+  )
+}
+
+export default function MobileExperience({ data, setData }: MobileExperienceProps) {
+  // 1. 筛选卡片
+  const chartCards = cardConfigs.filter((c) => c.category === 'chart' || c.category === 'summary')
+  const inputCards = cardConfigs.filter((c) => c.category === 'input')
 
   return (
     <Box
@@ -124,65 +174,55 @@ function MobileStepWrapper({ data, setData, onReset }: MobileExperienceProps) {
         left: 0,
         right: 0,
         bottom: 0,
-        width: '100%',
-        height: '100dvh',
-        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        bgcolor: 'background.default',
       }}
     >
-      <AnimatePresence initial={false} custom={direction}>
-        <motion.div
-          key={location.pathname}
-          custom={direction}
-          drag="x"
-          dragDirectionLock
-          dragElastic={0.5}
-          dragConstraints={{ left: 0, right: 0 }}
-          onDragEnd={handleDragEnd}
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{
-            x: { type: 'spring', stiffness: 300, damping: 30 },
-            opacity: { duration: 0.2 },
-          }}
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            top: 0,
-            left: 0,
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            WebkitOverflowScrolling: 'touch',
-          }}
-        >
-          <Box sx={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
-            <Container maxWidth="md" sx={{ flex: 1, py: { xs: 2, sm: 4 }, px: { xs: 1, sm: 2 }, display: 'flex' }}>
-              <MobileCard header={header} footer={footer}>
+      {/* Top Section: Charts (60%) */}
+      <Box sx={{ height: '50%', borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
+        <SimpleSwiper
+          items={chartCards}
+          renderItem={(config) => (
+            <Box sx={{ width: '100%', height: '100%', p: 1.5, overflow: 'hidden' }}>
+              <Box sx={{ flex: 1, height: 'calc(100% - 24px)', overflow: 'hidden' }}>
                 {config.component({ data, setData })}
-              </MobileCard>
-            </Container>
-          </Box>
-        </motion.div>
-      </AnimatePresence>
-    </Box>
-  )
-}
+              </Box>
+            </Box>
+          )}
+        />
+      </Box>
 
-export default function MobileExperience(props: MobileExperienceProps) {
-  return (
-    <HashRouter
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
-    >
-      <Routes>
-        <Route path="/" element={<Navigate to="/step1" replace />} />
-        <Route path="/*" element={<MobileStepWrapper {...props} />} />
-      </Routes>
-    </HashRouter>
+      {/* Bottom Section: Inputs (40%) */}
+      <Box sx={{ height: '50%', bgcolor: 'background.default' }}>
+        <SimpleSwiper
+          items={inputCards}
+          renderItem={(config) => (
+            <Box sx={{ width: '100%', height: '100%', p: 1.5, overflowY: 'auto' }}>
+              <Paper
+                elevation={0}
+                sx={{
+                  px: 2,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  borderRadius: 3,
+                  bgcolor: 'background.paper',
+                }}
+              >
+                <Typography variant="subtitle2" gutterBottom color="primary" sx={{ mb: 1 }}>
+                  {config.mobileTitle || config.title}
+                </Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ mb: 2 }}>
+                  {config.description}
+                </Typography>
+                <Box sx={{ flex: 1, overflowY: 'auto'}}>{config.component({ data, setData })}</Box>
+              </Paper>
+            </Box>
+          )}
+        />
+      </Box>
+    </Box>
   )
 }
 
