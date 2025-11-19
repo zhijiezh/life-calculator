@@ -84,7 +84,59 @@ export default function SalaryCurveEditor({ years, currency, locale, points, onC
 
   // 添加新点的通用函数，可以指定年份
   const handleAddPoint = (targetYear?: number) => {
-    const newYear = targetYear || Math.floor(years / 2)
+    // 如果没有指定年份，智能选择一个合适的年份
+    let newYear: number = targetYear || 0
+    if (!targetYear) {
+      const sortedPoints = [...points].sort((a, b) => a.year - b.year)
+      
+      if (sortedPoints.length === 0) {
+        // 如果没有点，添加中间年份
+        newYear = Math.floor(years / 2)
+      } else {
+        // 找到间隔最大的两个相邻点
+        let maxGap = 0
+        let gapStartYear = 1
+        
+        // 检查第一个点之前的间隔
+        if (sortedPoints[0].year > 1) {
+          maxGap = sortedPoints[0].year - 1
+          gapStartYear = 1
+        }
+        
+        // 检查相邻点之间的间隔
+        for (let i = 0; i < sortedPoints.length - 1; i++) {
+          const gap = sortedPoints[i + 1].year - sortedPoints[i].year
+          if (gap > maxGap && gap > 1) {
+            maxGap = gap
+            gapStartYear = sortedPoints[i].year
+          }
+        }
+        
+        // 检查最后一个点之后的间隔
+        const lastPoint = sortedPoints[sortedPoints.length - 1]
+        if (years - lastPoint.year > maxGap) {
+          maxGap = years - lastPoint.year
+          gapStartYear = lastPoint.year
+        }
+        
+        // 在最大间隔的中间添加新点
+        if (maxGap > 1) {
+          const nextPoint = sortedPoints.find((p) => p.year > gapStartYear)
+          const endYear = nextPoint ? nextPoint.year : years
+          newYear = Math.floor((gapStartYear + endYear) / 2)
+        } else {
+          // 如果所有间隔都是1，找第一个空闲年份
+          newYear = 1 // 默认值
+          for (let year = 1; year <= years; year++) {
+            if (!points.find((p) => p.year === year)) {
+              newYear = year
+              break
+            }
+          }
+        }
+      }
+    }
+
     const existingPoint = points.find((p) => p.year === newYear)
     if (existingPoint) {
       // 如果已存在，选中它进行编辑
